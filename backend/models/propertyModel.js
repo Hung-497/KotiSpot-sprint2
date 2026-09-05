@@ -25,6 +25,9 @@ const getAll = () => {
   return propertyArray.filter((property) => property.status === "active");
 };
 
+const isNonEmptyString = (value) => typeof value === "string" && value.trim() !== "";
+const isPositiveNumber = (value) => typeof value === "number" && Number.isFinite(value) && value > 0;
+
 const addOne = (propertyData) => {
   const {
     title,
@@ -42,21 +45,26 @@ const addOne = (propertyData) => {
     status,
   } = propertyData;
 
-  if (
-    !title ||
-    !description ||
-    !listingType ||
-    !propertyType ||
-    !price ||
-    !city ||
-    !address ||
-    !postalCode ||
-    !rooms ||
-    !bedrooms ||
-    !bathrooms ||
-    !size ||
-    !status
-  ) {
+  const requiredStrings = [
+    title,
+    description,
+    listingType,
+    propertyType,
+    city,
+    address,
+    postalCode,
+    status,
+  ];
+
+  if (!requiredStrings.every(isNonEmptyString)) {
+    return false;
+  }
+
+  if (!["sale", "rent"].includes(listingType)) {
+    return false;
+  }
+
+  if (!isPositiveNumber(price) || !isPositiveNumber(size)) {
     return false;
   }
 
