@@ -6,6 +6,8 @@ const {
   createProperty,
   updateProperty,
   deleteProperty,
+  filterProperties,
+  getPropertyByKeyword
 } = require('../controllers/propertyControllers');
 
 // GET /properties
@@ -22,5 +24,11 @@ router.put('/:propertyId', updateProperty);
 
 // DELETE /properties/:propertyId
 router.delete('/:propertyId', deleteProperty);
+
+//GET keyword
+// router.get('/:keyword', getPropertyByKeyword);
+
+// GET filter 
+// router.get('/', filterProperties);
 
 module.exports = router;

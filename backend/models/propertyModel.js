@@ -102,10 +102,25 @@ const deleteOneById = (id) => {
   return false;
 };
 
+const findByFilter = (propertyData) => {
+  let copy = {
+    ...propertyData,
+    "status" : "active"
+  }
+  return propertyArray.filter((property) => Object.keys(copy).every(key => copy[key] === property[key]));
+  
+}
+
+const findByKeyword = (keyword) => {
+  return propertyArray.find((property) => property.title.includes(keyword)||property.description.includes(keyword)) || false;
+}
+
 module.exports = {
   getAll,
   addOne,
   findById,
   updateOneById,
   deleteOneById,
+  findByFilter,
+  findByKeyword,
 };

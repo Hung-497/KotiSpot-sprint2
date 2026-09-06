@@ -55,10 +55,34 @@ const deleteProperty = (req, res) => {
   }
 };
 
+// GET Filter 
+const filterProperties = (req, res) => {
+  const properties = Property.findByFilter({...req.body}); // Spread the req.body object
+  if (properties) {
+    res.json(properties);
+  } else {
+    // Handle update failure (e.g., properties not found)
+    res.status(404).json({ message: "Properties not found" });
+  }
+};
+
+// GET keyword
+const getPropertyByKeyword = (req, res) => {
+  const keyword = req.params.keyword;
+  const property = Property.findByKeyword(keyword);
+  if (property) {
+    res.json(property);
+  } else {
+    res.status(404).json({ message: "Property not found" });
+  }
+};
+
 module.exports = {
   getAllProperties,
   createProperty,
   getPropertyById,
   updateProperty,
   deleteProperty,
+  filterProperties,
+  getPropertyByKeyword,
 };
