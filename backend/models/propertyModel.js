@@ -52,6 +52,7 @@ const sampleProperty = {
 };
 
 let propertyArray = [sampleProperty];
+let favouritesArray = [1];
 let nextId = 2;
 
 const getAll = () => {
@@ -241,6 +242,9 @@ const updateOneById = (id, propertyData) => {
 const deleteOneById = (id) => {
   const property = findById(id);
   if (property) {
+    if(checkFavourite(Number(id))){
+      deleteOneFavourite(id);
+    }
     const initialLength = propertyArray.length;
     propertyArray = propertyArray.filter(
       (property) => property.id !== Number(id),
@@ -249,15 +253,120 @@ const deleteOneById = (id) => {
   }
   return false;
 };
+  
+const findByFilter = (listingType = "any",
+  propertyType = "any",
+  propertySubType = "any", 
+  minPrice = 0, 
+  maxPrice = 99999999, 
+  currency = "EUR", 
+  city = "any", 
+  minRooms = 0, 
+  maxRooms = 99, 
+  minBedrooms = 0, 
+  maxBedrooms = 99, 
+  minBathrooms = 0, 
+  maxBathrooms = 99,
+  minSize = 0, 
+  maxSize = 99999, 
+  balcony = false, 
+  elevator = false, 
+  parking = false, 
+  furnished = false, 
+  petsAllowed = false, 
+  sauna = false, 
+  status = "active",) => {
+  let copy = propertyArray;
+  // return copy;
+  for (const x of copy) {
+    if(!(x.listingType == listingType || listingType == "any")){
+      copy.splice(copy.findIndex((element) => element == x), 1)
+      continue;
+    }
+    if(!(x.propertyType == propertyType || propertyType == "any")){
+      copy.splice(copy.findIndex((element) => element == x), 1)
+      continue;
+    }
+    if(!(x.propertySubType == propertySubType || propertySubType == "any")){
+      copy.splice(copy.findIndex((element) => element == x), 1)
+      continue;
+    }
+    // Prices have to be adapted for different currencies
+    if(!(x.price <= maxPrice)){
+      copy.splice(copy.findIndex((element) => element == x), 1)
+      continue;
+    }
+    if(!(x.price >= minPrice)){
+      copy.splice(copy.findIndex((element) => element == x), 1)
+      continue;
+    }
+    if(!(x.city == city || city == "any")){
+      copy.splice(copy.findIndex((element) => element == x), 1)
+      continue;
+    }
+    if(!(x.rooms <= maxRooms)){
+      copy.splice(copy.findIndex((element) => element == x), 1)
+      continue;
+    }
+    if(!(x.rooms >= minRooms)){
+      copy.splice(copy.findIndex((element) => element == x), 1)
+      continue;
+    }
+    if(!(x.bedrooms <= maxBedrooms)){
+      copy.splice(copy.findIndex((element) => element == x), 1)
+      continue;
+    }
+    if(!(x.bedrooms >= minBedrooms)){
+      copy.splice(copy.findIndex((element) => element == x), 1)
+      continue;
+    }
+    if(!(x.bathrooms <= maxBathrooms)){
+      copy.splice(copy.findIndex((element) => element == x), 1)
+      continue;
+    }
+    if(!(x.bathrooms >= minBathrooms)){
+      copy.splice(copy.findIndex((element) => element == x), 1)
+      continue;
+    }
+    if(!(x.size <= maxSize)){
+      copy.splice(copy.findIndex((element) => element == x), 1)
+      continue;
+    }
+    if(!(x.size >= minSize)){
+      copy.splice(copy.findIndex((element) => element == x), 1)
+      continue;
+    }
+    if(!(x.features.balcony == balcony || balcony == false)){
+      copy.splice(copy.findIndex((element) => element == x), 1)
+      continue;
+    }
+    if(!(x.features.elevator == elevator || elevator == false)){
+      copy.splice(copy.findIndex((element) => element == x), 1)
+      continue;
+    }
+    if(!(x.features.parking == parking || parking == false)){
+      copy.splice(copy.findIndex((element) => element == x), 1)
+      continue;
+    }
+    if(!(x.features.furnished == furnished || furnished == false)){
+      copy.splice(copy.findIndex((element) => element == x), 1)
+      continue;
+    }
+    if(!(x.features.petsAllowed == petsAllowed || petsAllowed == false)){
+      copy.splice(copy.findIndex((element) => element == x), 1)
+      continue;
+    }
+    if(!(x.features.sauna == sauna || sauna == false)){
+      copy.splice(copy.findIndex((element) => element == x), 1)
+      continue;
+    }
+    if(!(x.status == status)){
+      copy.splice(copy.findIndex((element) => element == x), 1)
+      continue;
+    }
+  }
 
-const findByFilter = (propertyData) => {
-  let copy = {
-    ...propertyData,
-    status: "active",
-  };
-  return propertyArray.filter((property) =>
-    Object.keys(copy).every((key) => copy[key] === property[key]),
-  );
+  return copy;
 };
 
 const findByKeyword = (keyword) => {
@@ -270,6 +379,37 @@ const findByKeyword = (keyword) => {
   );
 };
 
+
+const getAllFavourites = () => {
+    let arr = []
+    for (let i = 0; i < favouritesArray.length; i++) {
+        arr.push(propertyArray[i])
+    }
+    return arr;
+};
+const addOneFavourite = (id) => {
+    if(propertyArray.find((property) => property.id === Number(id)) != undefined) {
+        favouritesArray.push(id);
+        return getAllFavourites();
+    }
+    return false;
+}
+const checkFavourite = (id) => {
+    if (favouritesArray.includes(Number(id))){
+        return true;
+    }
+    return false;
+}
+//NOTE: id must be deleted when item is removed from propertyArray
+const deleteOneFavourite = (id) => {
+    if(favouritesArray.includes(Number(id))) {
+        favouritesArray.splice(Number(id), 1)
+        return getAllFavourites();
+    }
+    return false;
+}
+
+
 module.exports = {
   getAll,
   addOne,
@@ -279,4 +419,7 @@ module.exports = {
   deleteOneById,
   findByFilter,
   findByKeyword,
+  getAllFavourites,
+  addOneFavourite,
+  deleteOneFavourite
 };

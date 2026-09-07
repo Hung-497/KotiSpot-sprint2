@@ -56,8 +56,8 @@ const deleteProperty = (req, res) => {
 };
 
 // GET Filter 
-const filterProperties = (req, res) => {
-  const properties = Property.findByFilter({...req.body}); // Spread the req.body object
+const filterProperties = (req, res) => {  
+  const properties = Property.findByFilter(req.query.listingType, req.query.propertyType, req.query.propertySubType, req.query.minPrice, req.query.maxPrice, req.query.currency, req.query.city, req.query.minRooms, req.query.maxRooms, req.query.minBedrooms, req.query.maxBedrooms, req.query.minBathrooms, req.query.maxBathrooms, req.query.minSize, req.query.maxSize, req.query.balcony, req.query.elevator, req.query.parking, req.query.furnished, req.query.petsAllowed, req.query.sauna, req.query.status); 
   if (properties) {
     res.json(properties);
   } else {
@@ -77,6 +77,37 @@ const getPropertyByKeyword = (req, res) => {
   }
 };
 
+// Favourites
+const getAllFavourites = (req, res) => {
+  const properties = Property.getAllFavourites();
+  res.json(properties);
+};
+
+const addFavourite = (req, res) => {
+  const propertyId = req.params.propertyId;
+  const newFavourties = Property.addOneFavourite(propertyId); 
+
+  if (newFavourties) {
+    res.status(201).json(newFavourties);
+  } else {
+    // Handle error (e.g., failed to create favourites)
+    res.status(400).json({ message: "Invalid favourites data" });
+  }
+};
+
+const deleteFavourite = (req, res) => {
+  const propertyId = req.params.propertyId;
+  const newFavourties = Property.deleteOneFavourite(propertyId); 
+
+  if (newFavourties) {
+    res.json({ message: "Property deleted successfully" });
+  } else {
+    // Handle error (e.g., failed to delete favourites)
+    res.status(404).json({ message: "Not found" });
+  }
+}
+
+
 module.exports = {
   getAllProperties,
   createProperty,
@@ -85,4 +116,7 @@ module.exports = {
   deleteProperty,
   filterProperties,
   getPropertyByKeyword,
+  getAllFavourites,
+  addFavourite,
+  deleteFavourite,
 };
