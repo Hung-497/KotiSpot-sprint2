@@ -7,8 +7,8 @@ const favouritesRouter = require('./routes/favouritesRouter')
 app.use(express.json());
 
 // Use the propertyRouter for all /properties routes
-app.use('/properties', propertyRouter);
-app.use('/favourites', favouritesRouter);
+app.use('/api/properties', propertyRouter);
+app.use('/api/favourites', favouritesRouter);
 
 const port = 4000;
 // Start the server
