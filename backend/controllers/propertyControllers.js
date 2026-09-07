@@ -11,7 +11,7 @@ const createProperty = (req, res) => {
   const newProperty = Property.addOne({ ...req.body }); // Spread the req.body object
 
   if (newProperty) {
-    res.json(newProperty);
+    res.status(201).json(newProperty);
   } else {
     // Handle error (e.g., failed to create property)
     res.status(400).json({ message: "Invalid property data" });

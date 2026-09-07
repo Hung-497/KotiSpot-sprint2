@@ -76,6 +76,26 @@ const isValidDateString = (value) =>
   /^\d{4}-\d{2}-\d{2}$/.test(value) &&
   !Number.isNaN(Date.parse(value));
 
+const defaultFeatures = {
+  balcony: false,
+  elevator: false,
+  parking: false,
+  furnished: false,
+  petsAllowed: false,
+  sauna: false,
+};
+
+const featureNames = Object.keys(defaultFeatures);
+
+const isValidFeatures = (features) => {
+  if (features === undefined) return true; // Features are optional
+  if (!features || typeof features !== "object" || Array.isArray(features))
+    return false;
+  return Object.entries(features).every(
+    ([key, value]) => featureNames.includes(key) && typeof value === "boolean",
+  );
+};
+
 const validateProperty = (propertyData) => {
   if (!propertyData || typeof propertyData !== "object") {
     return false;
@@ -87,6 +107,7 @@ const validateProperty = (propertyData) => {
     description,
     listingType,
     propertyType,
+    propertySubType,
     currency,
     price,
     city,
@@ -98,12 +119,14 @@ const validateProperty = (propertyData) => {
     size,
     status,
     rentalDetails,
+    features,
   } = propertyData;
 
   const requiredStrings = [
     title,
     description,
     propertyType,
+    propertySubType,
     currency,
     city,
     address,
@@ -161,6 +184,10 @@ const validateProperty = (propertyData) => {
     return false;
   }
 
+  if (!isValidFeatures(features)) {
+    return false;
+  }
+
   return true;
 };
 
@@ -172,6 +199,7 @@ const addOne = (propertyData) => {
   const now = new Date().toISOString();
   const newItem = {
     ...propertyData,
+    features: { ...defaultFeatures, ...propertyData.features },
     id: nextId++,
     createdAt: now,
     updatedAt: now,
@@ -187,10 +215,14 @@ const findById = (id) => {
 
 const updateOneById = (id, propertyData) => {
   const property = findById(id);
+
   if (property) {
     const updatedProperty = {
       ...property,
       ...propertyData,
+      features: propertyData.features !== undefined
+        ? { ...property.features, ...propertyData.features }
+        : property.features,
       id: property.id,
       createdAt: property.createdAt,
       updatedAt: new Date().toISOString(),
@@ -221,15 +253,22 @@ const deleteOneById = (id) => {
 const findByFilter = (propertyData) => {
   let copy = {
     ...propertyData,
-    "status" : "active"
-  }
-  return propertyArray.filter((property) => Object.keys(copy).every(key => copy[key] === property[key]));
-  
-}
+    status: "active",
+  };
+  return propertyArray.filter((property) =>
+    Object.keys(copy).every((key) => copy[key] === property[key]),
+  );
+};
 
 const findByKeyword = (keyword) => {
-  return propertyArray.find((property) => property.title.includes(keyword)||property.description.includes(keyword)) || false;
-}
+  return (
+    propertyArray.find(
+      (property) =>
+        property.title.includes(keyword) ||
+        property.description.includes(keyword),
+    ) || false
+  );
+};
 
 module.exports = {
   getAll,
