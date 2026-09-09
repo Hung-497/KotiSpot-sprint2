@@ -1,16 +1,17 @@
 import { navLinks, authLinks } from "../../data";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
     return (
         <nav className="navbar">
-            <a href="#" className="logo">
+            <Link to ="/" className="logo">
                 <img className="kotispot" src= {null} alt="Kotispot" />
-            </a>
+            </Link>
 
             <ul className="navlinks">
                 {navLinks.map((link) => (
                     <li key={link.id}>
-                        <a href={link.href}>{link.text}</a>
+                        <Link to={link.href}>{link.text}</Link>
                     </li>
                 ))}
             </ul>
@@ -18,7 +19,7 @@ const Navbar = () => {
             <ul className="authLinks">
                 {authLinks.map((link) => (
                     <li key={link.id}>
-                        <a href={link.href}>{link.text}</a>
+                        <Link to={link.href}>{link.text}</Link>
                     </li>
                 ))}
             </ul>

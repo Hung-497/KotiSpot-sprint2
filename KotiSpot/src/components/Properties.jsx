@@ -1,11 +1,11 @@
 import Property from "./Property";
-import { properties } from "../../data";
+import { useState } from "react";
 
-const Properties = () => {
-    return(
-        <ul className = "properties">
+const Properties = ({ properties, favorites, setFavorites }) => {
+    return (
+        <ul className="properties">
             {properties.map((property) => (
-                <Property key= {property.id} property={property}/>
+                <Property key={property.id} property={property} favorites={favorites} setFavorites={setFavorites} />
             ))}
         </ul>
     )
