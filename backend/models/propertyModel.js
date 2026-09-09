@@ -369,7 +369,7 @@ const findByFilter = (listingType = "any",
   return copy;
 };
 
-const findByKeyword = (keyword) => {
+const findByKeyword = (keyword='') => {
   return (
     propertyArray.find(
       (property) =>
@@ -403,7 +403,7 @@ const checkFavourite = (id) => {
 //NOTE: id must be deleted when item is removed from propertyArray
 const deleteOneFavourite = (id) => {
     if(favouritesArray.includes(Number(id))) {
-        favouritesArray.splice(Number(id), 1)
+        favouritesArray.splice(favouritesArray.findIndex((element) => element == Number(id)), 1)
         return getAllFavourites();
     }
     return false;

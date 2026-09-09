@@ -91,7 +91,7 @@ const filterProperties = (req, res) => {
 
 // GET keyword
 const getPropertyByKeyword = (req, res) => {
-  const keyword = req.params.keyword;
+  const keyword = req.query.keyword;
   const property = Property.findByKeyword(keyword);
   if (property) {
     res.json(property);

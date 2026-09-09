@@ -16,6 +16,12 @@ router.get('/', getAllProperties);
 // POST /properties
 router.post('/', createProperty);
 
+// GET /properties/filter 
+router.get('/filter', filterProperties);
+
+//GET /properties/search
+router.get('/search', getPropertyByKeyword);
+
 // GET /properties/:propertyId
 router.get('/:propertyId', getPropertyById);
 
@@ -25,10 +31,6 @@ router.put('/:propertyId', updateProperty);
 // DELETE /properties/:propertyId
 router.delete('/:propertyId', deleteProperty);
 
-//GET keyword
-// router.get('/:keyword', getPropertyByKeyword);
 
-// GET filter 
-// router.get('/', filterProperties);
 
 module.exports = router;
