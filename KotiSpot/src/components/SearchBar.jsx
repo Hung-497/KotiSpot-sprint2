@@ -24,7 +24,7 @@ const SearchBar = () => {
             }
 
             if (
-                property.location.toLowerCase().includes(search.toLowerCase()) ||
+                property.city.toLowerCase().includes(search.toLowerCase()) ||
                 property.postalCode.includes(search)
             ) {
                 return true;
@@ -44,7 +44,7 @@ const SearchBar = () => {
     const handleFilterSearch = () => {
         const filteredProperties = properties.filter((property) => {
 
-            if (propertyType !== "" && property.propertyType !== propertyType) {
+            if (propertyType !== "" && property.propertySubType !== propertyType) {
                 return false;
             }
 
@@ -54,7 +54,7 @@ const SearchBar = () => {
 
             if (
                 location !== "" &&
-                !property.location.toLowerCase().includes(location.toLowerCase()) &&
+                !property.city.toLowerCase().includes(location.toLowerCase()) &&
                 !property.postalCode.includes(location)
             ) {
                 return false;
@@ -126,7 +126,7 @@ const SearchBar = () => {
                         </select>
                         <select onChange={e => setListingType(e.target.value)}>
                             <option value="" >Buy/Rent</option>
-                            <option value="buy">Buy</option>
+                            <option value="sale">Buy</option>
                             <option value="rent">Rent</option>
                         </select>
                         <select onChange={e => setRooms(e.target.value)}>

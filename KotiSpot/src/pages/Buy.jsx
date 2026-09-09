@@ -1,8 +1,17 @@
-const Buy = () => {
+import Properties from "../components/properties";
+import { properties } from "../../data";
+
+const Buy = ({ favorites, setFavorites }) => {
+    const propertiesForSale = properties.filter((property) => property.listingType === "sale");
+
     return (
         <div>
-            <h1>Buy</h1>
-            <p>Properties for sale</p>
+            <h1>Properties for sale</h1>
+            <Properties
+                properties={propertiesForSale}
+                favorites={favorites}
+                setFavorites={setFavorites}
+            />
         </div>
     );
 };
