@@ -4,7 +4,8 @@ import logo from "../assets/KotiSpot_Logo.png";
 const Register = ({ onRegister }) => {
     const navigate = useNavigate();
 
-    const handleRegister = () => {
+    const handleRegister = (e) => {
+      e.preventDefault();
         onRegister();
         navigate("/");
     };

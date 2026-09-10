@@ -27,7 +27,7 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
 
             <ul className="flex items-center gap-3">
                 {isLoggedIn ? (
-                    <li className="relative"> /* mean this is a milestone *?
+                    <li className="relative"> 
                         <button
                             type="button"
                             aria-label="Open profile menu"
