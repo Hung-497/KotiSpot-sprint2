@@ -39,7 +39,7 @@ const Contact = () => {
                     <label type="text">Message*</label>
                     <textarea placeholder="Type your message here"></textarea>
                 </div>
-                <Link className="submit-button" to="/contackthankmessage">Submit</Link>
+                <Link className="submit-button" to="/contactthankmessage">Submit</Link>
                 <h4 className="contact-us-other">Other ways to reach us</h4>
                     <div>Email: support@example.com</div>
                     <div>Phone: +358 4433224</div>

@@ -13,8 +13,8 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
 
     return (
         <nav className="flex h-20 items-center border-b border-gray-200 bg-white px-8 lg:px-16">
-            <Link to ="/" className="flex items-center">
-                <img className="w-45 h-auto" src= {logo} alt="Kotispot" />
+            <Link to="/" className="flex items-center">
+                <img className="w-45 h-auto" src={logo} alt="Kotispot" />
             </Link>
 
             <ul className="mx-auto flex items-center gap-9">
@@ -27,7 +27,7 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
 
             <ul className="flex items-center gap-3">
                 {isLoggedIn ? (
-                    <li className="relative"> 
+                    <li className="relative">
                         <button
                             type="button"
                             aria-label="Open profile menu"
@@ -39,16 +39,29 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
                         </button>
                         {isMenuOpen && (
                             <div className="absolute right-0 top-12 z-50 w-44 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
-                                <Link to="/results" onClick={() => setIsMenuOpen(false)}
-                                className="block px-4 py-3 text-sm text-[#08243f] transition hover:bg-[#eef6f2] hover:text-[#1f7356]">
-                                    Saved properties
+                                <Link to="/profile" onClick={() => setIsMenuOpen(false)}
+                                    className="block px-4 py-3 text-sm text-[#08243f] transition hover:bg-[#eef6f2] hover:text-[#1f7356]">
+                                    Profile information
                                 </Link>
-                                <Link to="/sell" onClick={() => setIsMenuOpen(false)} className="block px-4 py-3 text-sm text-[#08243f] transition hover:bg-[#eef6f2] hover:text-[#1f7356]"
-                                >
+                                <Link to="/favorites" onClick={() => setIsMenuOpen(false)}
+                                    className="block px-4 py-3 text-sm text-[#08243f] transition hover:bg-[#eef6f2] hover:text-[#1f7356]">
+                                    Favorites
+                                </Link>
+                                <Link to="/mylistings" onClick={() => setIsMenuOpen(false)} className="block px-4 py-3 text-sm text-[#08243f] transition hover:bg-[#eef6f2] hover:text-[#1f7356]">
                                     My listings
                                 </Link>
-                                <button type="button" onClick={handleLogout} className="w-full px-4 py-3 text-left text-sm text-red-600 transition hover:bg-red-50"
-                                >
+                                <Link to="/settings" onClick={() => setIsMenuOpen(false)}
+                                    className="block px-4 py-3 text-sm text-[#08243f] transition hover:bg-[#eef6f2] hover:text-[#1f7356]">
+                                    Settings
+                                </Link>
+                                <Link to="/notifications" onClick={() => setIsMenuOpen(false)}
+                                    className="block px-4 py-3 text-sm text-[#08243f] transition hover:bg-[#eef6f2] hover:text-[#1f7356]">
+                                    Notifications
+                                </Link>
+                                <Link to="/applicationform" onClick={() => setIsMenuOpen(false)} className="block px-4 py-3 text-sm text-[#08243f] transition hover:bg-[#eef6f2] hover:text-[#1f7356]">
+                                    Apply for a Seller/Real-estate Agent position
+                                </Link>
+                                <button type="button" onClick={handleLogout} className="w-full px-4 py-3 text-left text-sm text-red-600 transition hover:bg-red-50">
                                     Log out
                                 </button>
                             </div>
@@ -57,10 +70,10 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
                 ) : (
                     authLinks.map((link, index) => (
                         <li key={link.id}>
-                            <Link to={link.href} 
-                            className={index === authLinks.length - 1
-                            ? "rounded-lg bg-[#1f7356] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#165942]"
-                            : "rounded-lg border border-[#1f7356] px-5 py-2.5 text-sm font-medium text-[#1f7356] transition hover:bg-[#eef6f2]" }
+                            <Link to={link.href}
+                                className={index === authLinks.length - 1
+                                    ? "rounded-lg bg-[#1f7356] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#165942]"
+                                    : "rounded-lg border border-[#1f7356] px-5 py-2.5 text-sm font-medium text-[#1f7356] transition hover:bg-[#eef6f2]"}
                             >{link.text}
                             </Link>
                         </li>

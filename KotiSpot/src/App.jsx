@@ -11,6 +11,14 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Rent from "./pages/Rent";
 import Sell from "./pages/Sell";
+import ApplicationForm from "./pages/ApplicationForm";
+import ApplicationThankMessage from "./pages/ApplicationThankMessage"
+import Favorites from "./pages/Favorites";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
+import Notifications from "./pages/Notifications";
+import MyListings from "./pages/MyListings";
+import SellerDashboard from "./pages/SellerDashboard";
 import { useState } from "react";
 
 function App() {
@@ -34,13 +42,29 @@ function App() {
                     />
                     <Route path="/results" element={<Results favorites={favorites} setFavorites={setFavorites} />}
                     />
+                    <Route path="/favorites" element={<Favorites favorites={favorites} setFavorites={setFavorites} />}
+                    />
                     <Route path="/buy" element={<Buy favorites={favorites} setFavorites={setFavorites} />}
                     />
                     <Route path="/propertyInfo" element={<PropertyInfo favorites={favorites} setFavorites={setFavorites} />}
                     />
-                    <Route path="/contackthankmessage" element={<ContactThankMessage />}
+                    <Route path="/contactthankmessage" element={<ContactThankMessage />}
+                    />
+                    <Route path="/sellerdashboard" element={<SellerDashboard />}
+                    />
+                    <Route path="/applicationthankmessage" element={<ApplicationThankMessage />}
+                    />
+                    <Route path="/settings" element={<Settings />}
+                    />
+                    <Route path="/notifications" element={<Notifications />}
+                    />
+                    <Route path="/mylistings" element={<MyListings />}
+                    />
+                    <Route path="/profile" element={<Profile />}
                     />
                     <Route path="/contact" element={<Contact />}
+                    />
+                    <Route path="/applicationform" element={<ApplicationForm />}
                     />
                     <Route path="/login" element={<Login onLogin={logIn} />}
                     />

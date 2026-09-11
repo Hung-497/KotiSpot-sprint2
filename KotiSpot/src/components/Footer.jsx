@@ -47,29 +47,13 @@ const Footer = () => {
       <h3 className="mb-4 text-lg font-bold">Explore</h3>
 
       <ul className="space-y-2 text-black-600">
-        <li>
-          <Link to="/buy" className="transition-colors hover:text-[#1f7356]">
-            Buy a Home
-          </Link>
-        </li>
-
-        <li>
-          <Link to="/rent" className="transition-colors hover:text-[#1f7356]">
-            Rent a Home
-          </Link>
-        </li>
-
-        <li>
-          <a href="#" className="transition-colors hover:text-[#1f7356]">
-            Properties
-          </a>
-        </li>
-
-        <li>
-          <a href="#" className="transition-colors hover:text-[#1f7356]">
-            Favorites
-          </a>
-        </li>
+        {navLinks.map((link) => (
+          <li key={link.id}>
+            <Link to={link.href} className="transition-colors hover:text-[#1f7356]">
+              {link.footerText}
+            </Link>
+          </li>
+        ))}
       </ul>
     </div>
 

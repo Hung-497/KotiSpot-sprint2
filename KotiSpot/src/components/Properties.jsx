@@ -1,5 +1,4 @@
 import Property from "./Property";
-import { useState } from "react";
 
 const Properties = ({ properties, favorites, setFavorites }) => {
     return (
