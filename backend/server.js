@@ -1,10 +1,13 @@
 const express = require('express');
 const app = express();
+const connectDB = require('./config/db');
 const propertyRouter = require('./routes/propertyRouter');
 const favouritesRouter = require('./routes/favouritesRouter')
 
 // Middleware to parse JSON
 app.use(express.json());
+
+connectDB();
 
 // Use the propertyRouter for all /properties routes
 app.use('/api/properties', propertyRouter);

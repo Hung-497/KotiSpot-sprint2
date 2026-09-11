@@ -4,21 +4,15 @@ const {
   getAllFavourites,
   addFavourite,
   deleteFavourite,
-} = require('../controllers/propertyControllers');
+} = require('../controllers/favouriteControllers');
 
-// GET /properties
+// GET /favourites
 router.get('/', getAllFavourites);
 
-// POST /properties
+// POST /favourites/:propertyId
 router.post('/:propertyId', addFavourite);
 
-// GET /properties/:propertyId
-// router.get('/:propertyId', getPropertyById);
-
-// PUT /properties/:propertyId
-// router.put('/:propertyId', updateProperty);
-
-// DELETE /properties/:propertyId
+// DELETE /favourites/:propertyId
 router.delete('/:propertyId', deleteFavourite);
 
 module.exports = router;

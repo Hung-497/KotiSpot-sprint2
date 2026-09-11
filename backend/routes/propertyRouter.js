@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {
+  getActiveProperties,
   getAllProperties,
   getPropertyById,
   createProperty,
@@ -10,8 +11,11 @@ const {
   getPropertyByKeyword
 } = require('../controllers/propertyControllers');
 
-// GET /properties
-router.get('/', getAllProperties);
+// GET /properties for active properties
+router.get('/', getActiveProperties);
+
+// GET /properties for all properties
+router.get('/all', getAllProperties);
 
 // POST /properties
 router.post('/', createProperty);
@@ -25,12 +29,10 @@ router.get('/search', getPropertyByKeyword);
 // GET /properties/:propertyId
 router.get('/:propertyId', getPropertyById);
 
-// PUT /properties/:propertyId
-router.put('/:propertyId', updateProperty);
+// PATCH /properties/:propertyId
+router.patch('/:propertyId', updateProperty);
 
 // DELETE /properties/:propertyId
 router.delete('/:propertyId', deleteProperty);
-
-
 
 module.exports = router;
