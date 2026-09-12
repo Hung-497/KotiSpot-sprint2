@@ -1,13 +1,7 @@
 import logo from "../assets/KotiSpot_logo.png";
 import { navLinks } from "../../data";
 import { Link } from "react-router-dom";
-import {
-  FaGithub,
-  FaInstagram,
-  FaLinkedin,
-  FaFacebook,
-  FaXTwitter,
-} from "react-icons/fa6";
+import { FaGithub, FaInstagram, FaLinkedin, FaFacebook, FaXTwitter } from "react-icons/fa6";
 
 const Footer = () => {
   return (

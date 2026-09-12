@@ -2,6 +2,7 @@ import { navLinks, authLinks } from "../../data";
 import logo from "../assets/KotiSpot_logo.png";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { User, Heart, House, Settings, Bell, BriefcaseBusiness, LogOut } from "lucide-react";
 
 const Navbar = ({ isLoggedIn, onLogout }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -38,34 +39,79 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
                             &#128100;
                         </button>
                         {isMenuOpen && (
-                            <div className="absolute right-0 top-12 z-50 w-44 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
-                                <Link to="/profile" onClick={() => setIsMenuOpen(false)}
-                                    className="block px-4 py-3 text-sm text-[#08243f] transition hover:bg-[#eef6f2] hover:text-[#1f7356]">
-                                    Profile information
-                                </Link>
-                                <Link to="/favorites" onClick={() => setIsMenuOpen(false)}
-                                    className="block px-4 py-3 text-sm text-[#08243f] transition hover:bg-[#eef6f2] hover:text-[#1f7356]">
-                                    Favorites
-                                </Link>
-                                <Link to="/mylistings" onClick={() => setIsMenuOpen(false)} className="block px-4 py-3 text-sm text-[#08243f] transition hover:bg-[#eef6f2] hover:text-[#1f7356]">
-                                    My listings
-                                </Link>
-                                <Link to="/settings" onClick={() => setIsMenuOpen(false)}
-                                    className="block px-4 py-3 text-sm text-[#08243f] transition hover:bg-[#eef6f2] hover:text-[#1f7356]">
-                                    Settings
-                                </Link>
-                                <Link to="/notifications" onClick={() => setIsMenuOpen(false)}
-                                    className="block px-4 py-3 text-sm text-[#08243f] transition hover:bg-[#eef6f2] hover:text-[#1f7356]">
-                                    Notifications
-                                </Link>
-                                <Link to="/applicationform" onClick={() => setIsMenuOpen(false)} className="block px-4 py-3 text-sm text-[#08243f] transition hover:bg-[#eef6f2] hover:text-[#1f7356]">
-                                    Apply for a Seller/Real-estate Agent position
-                                </Link>
-                                <button type="button" onClick={handleLogout} className="w-full px-4 py-3 text-left text-sm text-red-600 transition hover:bg-red-50">
-                                    Log out
-                                </button>
+                        <div className="absolute right-0 top-14 z-50 w-105 rounded-3xl border border-gray-200 bg-white p-5 shadow-[0_15px_40px_rgba(15,35,55,0.15)]">
+                            <div
+                            className="absolute -top-2 right-7 h-4 w-4 rotate-45 border-l border-t border-gray-200 bg-white"/>
+
+                            <div className="relative z-10 mb-5 flex items-center gap-4 rounded-2xl bg-[#f1f7f4] px-5 py-5">
+
+                            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#e2f0e9] text-[#17634f]">
+                                <User size={34} strokeWidth={1.8} />
                             </div>
-                        )}
+
+                            <div>
+                                <h3 className="text-xl font-semibold text-[#08243f]">
+                                Full name
+                                </h3>
+
+                                <p className="mt-1 text-sm text-gray-500">
+                                email@example.com
+                                </p>
+                            </div>
+                            </div>
+
+                            
+                            <div className="mb-3 border-t border-gray-200" />
+
+                            
+                            <div className="space-y-1">
+
+                            <Link to="/profile" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-4 rounded-xl bg-[#eef6f2] px-4 py-3 text-sm font-medium text-[#17634f] transition hover:bg-[#e2f0e9]">
+                                <User size={20} strokeWidth={1.8} />
+                                Profile information
+                            </Link>
+
+                            <Link to="/favorites" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-4 rounded-xl px-4 py-3 text-sm text-[#08243f] transition hover:bg-[#eef6f2] hover:text-[#17634f]">
+                                <Heart size={20} strokeWidth={1.8} />
+                                Favorites
+                            </Link>
+
+                            <Link to="/mylistings" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-4 rounded-xl px-4 py-3 text-sm text-[#08243f] transition hover:bg-[#eef6f2] hover:text-[#17634f]">
+                                <House size={20} strokeWidth={1.8} />
+                                My listings
+                            </Link>
+
+                            <Link to="/notifications" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-4 rounded-xl px-4 py-3 text-sm text-[#08243f] transition hover:bg-[#eef6f2] hover:text-[#17634f]">
+                                <Bell size={20} strokeWidth={1.8} />
+                                Notifications
+                            </Link>
+
+                            <Link to="/settings" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-4 rounded-xl px-4 py-3 text-sm text-[#08243f] transition hover:bg-[#eef6f2] hover:text-[#17634f]">
+                                <Settings size={20} strokeWidth={1.8} />
+                                Settings
+                            </Link>
+
+                            <Link to="/applicationform" onClick={() => setIsMenuOpen(false)} className="flex items-start gap-4rounded-xl px-4 py-3 text-sm text-[#08243f] transition hover:bg-[#eef6f2] hover:text-[#17634f]">
+                                <BriefcaseBusiness size={20} strokeWidth={1.8} className="mt-0.5 shrink-0"/>
+
+                                <span>
+                                Apply for a Seller/Real-estate
+                                <br />
+                                Agent position
+                                </span>
+                            </Link>
+
+                            </div>
+
+                            <div className="my-3 border-t border-gray-200" />
+
+                            <button type="button" onClick={handleLogout} className="flex w-full items-center gap-4 rounded-xl px-4 py-3 text-left text-sm font-medium text-[#08243f] transition hover:bg-red-50 hover:text-red-600">
+                            <LogOut size={20} strokeWidth={1.8} />
+                            Log out
+                            </button>
+                        </div>
+)}
+                        
                     </li>
                 ) : (
                     authLinks.map((link, index) => (
