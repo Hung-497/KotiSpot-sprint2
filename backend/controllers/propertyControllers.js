@@ -120,9 +120,18 @@ const deleteProperty = async (req, res) => {
 
 const filterProperties = async (req, res) => {
   try {
+    const { sort } = req.query;
     const query = {
       status: "active",
     };
+
+    const validSorts = ["price-asc", "price-desc", "newest"];
+    if (
+      sort !== undefined &&
+      (typeof sort !== "string" || !validSorts.includes(sort))
+    ) {
+      return res.status(400).json({ message: "Invalid sort value" });
+    }
 
     const validListingTypes = ["sale", "rent", "any"];
     const validPropertyTypes = ["residential", "any"];
@@ -232,7 +241,17 @@ const filterProperties = async (req, res) => {
       }
     }
 
-    const properties = await Property.find(query);
+    const propertyQuery = Property.find(query);
+
+    if (sort === "price-asc") {
+      propertyQuery.sort({ price: 1 });
+    } else if (sort === "price-desc") {
+      propertyQuery.sort({ price: -1 });
+    } else if (sort === "newest") {
+      propertyQuery.sort({ createdAt: -1 });
+    }
+
+    const properties = await propertyQuery;
 
     res.status(200).json(properties);
   } catch (error) {
@@ -244,28 +263,40 @@ const filterProperties = async (req, res) => {
 
 // GET keyword
 const getPropertyByKeyword = async (req, res) => {
-  const { keyword } = req.query;
+  const { keyword, listingType } = req.query;
 
   if (typeof keyword !== "string" || keyword.trim() === "") {
-    return res.status(400).json({ message: "Keyword is required" });
+    return res
+      .status(400)
+      .json({ message: "Keyword must be a single non-blank value" });
+  }
+
+  const validListingTypes = ["sale", "rent", "any"];
+  if (
+    listingType !== undefined &&
+    (typeof listingType !== "string" || !validListingTypes.includes(listingType))
+  ) {
+    return res.status(400).json({ message: "Invalid listing type" });
   }
 
   const escapedKeyword = keyword.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const query = {
+    status: "active",
+    $or: [
+      { title: { $regex: escapedKeyword, $options: "i" } },
+      { description: { $regex: escapedKeyword, $options: "i" } },
+      { city: { $regex: escapedKeyword, $options: "i" } },
+      { address: { $regex: escapedKeyword, $options: "i" } },
+    ],
+  };
+
+  if (listingType !== undefined && listingType !== "any") {
+    query.listingType = listingType;
+  }
 
   try {
-    const property = await Property.findOne({
-      status: "active",
-      $or: [
-        { title: { $regex: escapedKeyword } },
-        { description: { $regex: escapedKeyword } },
-      ],
-    });
-
-    if (property) {
-      res.json(property);
-    } else {
-      res.status(404).json({ message: "Property not found" });
-    }
+    const properties = await Property.find(query);
+    res.status(200).json(properties);
   } catch (error) {
     res.status(500).json({
       message: "Failed to search properties",
