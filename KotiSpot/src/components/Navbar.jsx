@@ -66,7 +66,7 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
                             
                             <div className="space-y-1">
 
-                            <Link to="/profile" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-4 rounded-xl bg-[#eef6f2] px-4 py-3 text-sm font-medium text-[#17634f] transition hover:bg-[#e2f0e9]">
+                            <Link to="/profile" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-4 rounded-xl px-4 py-3 text-sm text-[#08243f] transition hover:bg-[#eef6f2] hover:text-[#17634f]">
                                 <User size={20} strokeWidth={1.8} />
                                 Profile information
                             </Link>
@@ -91,7 +91,7 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
                                 Settings
                             </Link>
 
-                            <Link to="/applicationform" onClick={() => setIsMenuOpen(false)} className="flex items-start gap-4rounded-xl px-4 py-3 text-sm text-[#08243f] transition hover:bg-[#eef6f2] hover:text-[#17634f]">
+                            <Link to="/applicationform" onClick={() => setIsMenuOpen(false)} className="flex items-start gap-4 rounded-xl px-4 py-3 text-sm text-[#08243f] transition hover:bg-[#eef6f2] hover:text-[#17634f]">
                                 <BriefcaseBusiness size={20} strokeWidth={1.8} className="mt-0.5 shrink-0"/>
 
                                 <span>

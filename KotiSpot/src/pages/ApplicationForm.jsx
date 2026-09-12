@@ -64,7 +64,9 @@ const ApplicationForm = () => {
                         type="file"
                         accept="image/*"
                     />
+                    <Link to="/applicationthankmessage">Submit</Link>
                 </div>
+
             )}
 
             {role === "agent" && (
@@ -114,9 +116,9 @@ const ApplicationForm = () => {
                     </div>
                     <div>
                         <label>Real estate licence:</label>
-                        <input 
-                            type = "file" 
-                            accept ="image/*"
+                        <input
+                            type="file"
+                            accept="image/*"
                         />
                     </div>
                     <Link to="/applicationthankmessage">Submit</Link>

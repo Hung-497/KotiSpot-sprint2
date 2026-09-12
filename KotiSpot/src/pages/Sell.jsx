@@ -27,6 +27,8 @@ const Sell = () => {
                     </button>
                 </Link>
             </div>
+            <div>
+            </div>
             <div>        
                 <Link to = "/sellerdashboard">    
                     <button>
@@ -34,6 +36,13 @@ const Sell = () => {
                     </button>
                 </Link>   
             </div> 
+            <div>
+                <h1>After approval, you can</h1>
+                <h3>Craete listings for sale or rent</h3>
+                <h3>Edit, remove, and manage your listings </h3>
+                <h3>Use AI market-price and price-prediction tools</h3>
+                
+            </div>
 
         </div>
     );

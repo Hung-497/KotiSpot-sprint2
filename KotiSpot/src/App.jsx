@@ -19,11 +19,23 @@ import Settings from "./pages/Settings";
 import Notifications from "./pages/Notifications";
 import MyListings from "./pages/MyListings";
 import SellerDashboard from "./pages/SellerDashboard";
+import Listings from "./pages/Listings";
 import { useState } from "react";
 
 function App() {
     const [favorites, setFavorites] = useState([]);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [propertyListings, setPropertyListings] = useState([]);
+
+    const deleteListing = (id) => {
+        setPropertyListings((prevListings) =>
+            prevListings.filter((listing) => listing.id !== id)
+        );
+    };
+
+    const updateListing = (updatedListing) => { 
+        setPropertyListings((prevListings) => 
+            prevListings.map((listing) => listing.id === updatedListing.id ? updatedListing : listing ) ); };
 
     const logIn = () => {
         setIsLoggedIn(true);
@@ -50,15 +62,17 @@ function App() {
                     />
                     <Route path="/contactthankmessage" element={<ContactThankMessage />}
                     />
-                    <Route path="/sellerdashboard" element={<SellerDashboard />}
+                    <Route path="/sellerdashboard" element={<SellerDashboard propertyListings={propertyListings}deleteListing={deleteListing} updateListing={updateListing}/>}
                     />
                     <Route path="/applicationthankmessage" element={<ApplicationThankMessage />}
+                    />
+                    <Route path="/listings" element={<Listings propertyListings={propertyListings} setPropertyListings={setPropertyListings} />}
                     />
                     <Route path="/settings" element={<Settings />}
                     />
                     <Route path="/notifications" element={<Notifications />}
                     />
-                    <Route path="/mylistings" element={<MyListings />}
+                    <Route path="/mylistings" element={<MyListings propertyListings={propertyListings} deleteListing={deleteListing} updateListing={updateListing}/>}
                     />
                     <Route path="/profile" element={<Profile />}
                     />
