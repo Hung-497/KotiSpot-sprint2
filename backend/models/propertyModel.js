@@ -126,6 +126,29 @@ const imageSchema = new Schema(
   { _id: false },
 );
 
+const moderationSchema = new Schema(
+  {
+    status: {
+      type: String,
+      required: true,
+      enum: ["unreviewed", "flagged", "approved", "removed"],
+      default: "unreviewed",
+    },
+    reason: {
+      type: String,
+      trim: true,
+      validate: {
+        validator: (value) => value === undefined || value.trim() !== "",
+        message: "moderation reason must not be blank",
+      },
+    },
+    moderatedAt: {
+      type: Date,
+    },
+  },
+  { _id: false },
+);
+
 const propertySchema = new Schema(
   {
     ownerId: {
@@ -234,6 +257,10 @@ const propertySchema = new Schema(
         message:
           "images must contain exactly one main image and unique image ids",
       },
+    },
+    moderation: {
+      type: moderationSchema,
+      default: () => ({ status: "unreviewed" }),
     },
     status: {
       type: String,

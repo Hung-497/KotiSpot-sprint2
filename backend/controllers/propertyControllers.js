@@ -5,10 +5,22 @@ const {
   addBooleanFilter,
 } = require("../utils/propertyQueryHelpers");
 
+const publicPropertyScope = {
+  status: "active",
+  "moderation.status": "approved",
+};
+
+const hasModerationInput = (body) =>
+  body &&
+  typeof body === "object" &&
+  Object.keys(body).some(
+    (key) => key === "moderation" || key.startsWith("moderation."),
+  );
+
 // GET /properties
 const getActiveProperties = async (req, res) => {
   try {
-    const properties = await Property.find({ status: "active" });
+    const properties = await Property.find(publicPropertyScope);
     res.json(properties);
   } catch (error) {
     res.status(500).json({ message: "Failed to retrieve properties" });
@@ -26,6 +38,12 @@ const getAllProperties = async (req, res) => {
 
 // POST /properties
 const createProperty = async (req, res) => {
+  if (hasModerationInput(req.body)) {
+    return res.status(400).json({
+      message: "Moderation can only be changed through moderation routes",
+    });
+  }
+
   try {
     const newProperty = await Property.create({ ...req.body });
     res.status(201).json(newProperty);
@@ -51,7 +69,10 @@ const getPropertyById = async (req, res) => {
   }
 
   try {
-    const property = await Property.findById(propertyId);
+    const property = await Property.findOne({
+      _id: propertyId,
+      ...publicPropertyScope,
+    });
     if (property) {
       res.status(200).json(property);
     } else {
@@ -68,6 +89,12 @@ const updateProperty = async (req, res) => {
 
   if (!mongoose.Types.ObjectId.isValid(propertyId)) {
     return res.status(400).json({ message: "Invalid property ID" });
+  }
+
+  if (hasModerationInput(req.body)) {
+    return res.status(400).json({
+      message: "Moderation can only be changed through moderation routes",
+    });
   }
 
   try {
@@ -122,7 +149,7 @@ const filterProperties = async (req, res) => {
   try {
     const { sort } = req.query;
     const query = {
-      status: "active",
+      ...publicPropertyScope,
     };
 
     const validSorts = ["price-asc", "price-desc", "newest"];
@@ -281,7 +308,7 @@ const getPropertyByKeyword = async (req, res) => {
 
   const escapedKeyword = keyword.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const query = {
-    status: "active",
+    ...publicPropertyScope,
     $or: [
       { title: { $regex: escapedKeyword, $options: "i" } },
       { description: { $regex: escapedKeyword, $options: "i" } },
