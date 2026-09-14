@@ -1,18 +1,126 @@
 import Properties from "../components/properties";
 import { properties } from "../../data";
+import {
+  Search,
+  SlidersHorizontal,
+  Star,
+  Heart,
+} from "lucide-react";
+
 const Rent = ( {favorites, setFavorites} ) => {
     const forRentProperties = properties.filter((property) => property.listingType === "rent")
 
     return (
-        <div>
-            <h1>Rent</h1>
-            <Properties
-                properties={forRentProperties}
-                favorites={favorites}
-                setFavorites={setFavorites}
-            />
+    <div className="Heading min-h-screen bg-[#f8faf9]">
+      <div className="mx-auto max-w-6xl px-6 py-10">
+
+        <h1 className="text-3xl font-bold text-[#08243f]">
+          Find a home to rent
+        </h1>
+
+        <p className="mt-2 text-gray-500">
+          Search rental properties across Finland.
+        </p>
+
+        <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+
+          <p className="mb-4 font-medium text-[#08243f]">
+            Search for a house to rent
+          </p>
+
+          <div className="flex overflow-hidden rounded-xl border border-gray-300">
+
+            <div className="relative flex-1">
+              <Search
+                size={20}
+                className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400"
+              />
+
+              <input
+                type="text"
+                placeholder="Search city, neighborhood or postal code"
+                className="
+                  w-full
+                  py-4
+                  pl-14
+                  pr-4
+                  text-sm
+                  text-[#08243f]
+                  outline-none
+                "
+              />
+            </div>
+
+            <button
+              className="
+                flex items-center gap-2
+                border-l border-gray-300
+                px-7
+                font-medium
+                text-[#08243f]
+                hover:bg-gray-50
+              "
+            >
+              <SlidersHorizontal size={19} />
+              Filter
+            </button>
+
+          </div>
         </div>
-    );
+
+        <div className="Discover mt-10">
+
+          <h2 className="text-2xl font-bold text-[#08243f]">
+            Discover properties
+          </h2>
+
+          <div className="mt-4 flex gap-5">
+
+            <button
+              className="
+                flex items-center gap-2
+                rounded-full
+                bg-[#17634f]
+                px-5 py-2.5
+                text-sm font-medium
+                text-white
+              "
+            >
+              <Star
+                size={16}
+                fill="currentColor"
+              />
+
+              Recommendations
+            </button>
+
+
+            <button className="flex items-center gap-2
+                rounded-full
+                bg-[#eef6f2]
+                px-5 py-2.5
+                text-sm font-medium
+                text-[#08243f]
+                transition
+                hover:bg-[#dfeee7]">
+              <Heart size={16} />
+              Favorites
+            </button>
+
+          </div>
+        </div>
+
+        <div className="Properties mt-6">
+          <Properties
+            properties={forRentProperties}
+            favorites={favorites}
+            setFavorites={setFavorites}
+          />
+        </div>
+
+      </div>
+    </div>
+  );
 };
 
 export default Rent;

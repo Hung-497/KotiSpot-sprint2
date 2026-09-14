@@ -5,25 +5,26 @@ const Property = ({ property, favorites, setFavorites }) => {
     const { image, address, city, price, size } = property;
 
     return (
-        <div className="property-card">
+        <div className="property-card w-52.5 overflow-hidden rounded-md border border-gray-300 bg-white shadow-sm">
+            <div className="relative">
 
             <Link to="/propertyInfo" state={{ property }}>
                 <img
-                    className="property-image"
                     src={image}
                     alt="house image"
+                    className="h-28.75 w-full object-cover"
                 />
 
                 <div className="property-info">
                     <div>{address}</div>
-                    <div>{city}</div>
-                    <div>{price}</div>
-                    <div>{size}</div>
+                    <div> ⌖ {city}</div>
+                    <div>{price} € </div>
+                    <div>{size} m² </div>
                 </div>
             </Link>
 
             <button
-                className="favorite-button"
+                className="favorite-button absolute right-2 top-2"
                 onClick={() => {
                     if (isFavorite) {
                         setFavorites(
@@ -39,6 +40,7 @@ const Property = ({ property, favorites, setFavorites }) => {
             >
                 {isFavorite ? "♥" : "♡"}
             </button>
+            </div>
 
         </div>
     );

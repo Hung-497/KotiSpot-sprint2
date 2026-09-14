@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import Listing from "../components/Listing";
 
 const Listings = ({ propertyListings, setPropertyListings }) => {
     const [listingType, setListingType] = useState("");
+
     const [newListing, setNewListing] = useState({
         title: "",
         location: "",
@@ -42,7 +42,9 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
             ...prevListing,
             features: checked
                 ? [...prevListing.features, value]
-                : prevListing.features.filter((feature) => feature !== value)
+                : prevListing.features.filter(
+                    (feature) => feature !== value
+                )
         }));
     };
 
@@ -74,7 +76,6 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
                 ...newListing,
                 listingType: listingType,
                 id: Date.now()
-
             };
 
             if (
@@ -100,6 +101,7 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
                 ]);
             }
         }
+
         setNewListing({
             title: "",
             location: "",
@@ -120,7 +122,7 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
             photos: [],
             price: "",
             condition: ""
-        })
+        });
     };
 
     const handleListingType = (event) => {
@@ -128,313 +130,575 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
     };
 
     return (
-        <div>
-            <h1>Create property listing</h1>
+        <div className="min-h-screen bg-[#f8faf9] px-6 py-10">
+            <div className="mx-auto max-w-6xl">
 
-            <div>
-                <h2>Listing purpose</h2>
+                {/* Back */}
+                <Link
+                    to="/sell"
+                    className="text-sm text-gray-500 hover:text-[#17634f]"
+                >
+                    ← Back
+                </Link>
 
-                <label>
-                    For rent
-                    <input
-                        type="radio"
-                        value="forRent"
-                        checked={listingType === "forRent"}
-                        onChange={handleListingType}
-                    />
-                </label>
+                {/* Heading */}
+                <h1 className="mt-4 text-3xl font-bold text-[#08243f]">
+                    Create property listing
+                </h1>
 
-                <label>
-                    For sale
-                    <input
-                        type="radio"
-                        value="forSale"
-                        checked={listingType === "forSale"}
-                        onChange={handleListingType}
-                    />
-                </label>
-            </div>
+                <p className="mt-1 text-sm text-gray-500">
+                    Fill in the details below to list your property.
+                </p>
 
-            <div>
-                <h2>Property information</h2>
 
-                <div>
-                    <label>Title</label>
-                    <input
-                        type="text"
-                        name="title"
-                        value={newListing.title}
-                        onChange={handleInputChange}
-                    />
+                {/* LISTING PURPOSE */}
+                <div className="mt-6 rounded-xl border border-gray-200 bg-white p-6">
+
+                    <h2 className="font-semibold text-[#08243f]">
+                        Listing purpose
+                    </h2>
+
+                    <div className="mt-4 flex gap-10">
+
+                        <label className="flex items-center gap-2 text-sm">
+                            <input
+                                type="radio"
+                                value="forSale"
+                                checked={listingType === "forSale"}
+                                onChange={handleListingType}
+                            />
+                            For sale
+                        </label>
+
+                        <label className="flex items-center gap-2 text-sm">
+                            <input
+                                type="radio"
+                                value="forRent"
+                                checked={listingType === "forRent"}
+                                onChange={handleListingType}
+                            />
+                            For rent
+                        </label>
+
+                    </div>
                 </div>
 
-                <div>
-                    <label>Location</label>
-                    <input
-                        type="text"
-                        name="location"
-                        value={newListing.location}
-                        onChange={handleInputChange}
-                    />
+
+                {/* PROPERTY INFORMATION */}
+                <div className="mt-5 rounded-xl border border-gray-200 bg-white p-6">
+
+                    <h2 className="mb-5 font-semibold text-[#08243f]">
+                        Property information
+                    </h2>
+
+                    {/* Title + location */}
+                    <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+
+                        <div>
+                            <label className="mb-2 block text-sm">
+                                Title *
+                            </label>
+
+                            <input
+                                type="text"
+                                name="title"
+                                value={newListing.title}
+                                onChange={handleInputChange}
+                                placeholder="e.g. Modern 2-bedroom apartment"
+                                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none focus:border-[#17634f]"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="mb-2 block text-sm">
+                                Location *
+                            </label>
+
+                            <input
+                                type="text"
+                                name="location"
+                                value={newListing.location}
+                                onChange={handleInputChange}
+                                placeholder="e.g. Helsinki, Finland"
+                                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none focus:border-[#17634f]"
+                            />
+                        </div>
+
+                    </div>
+
+
+                    {/* Address + postal */}
+                    <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2">
+
+                        <div>
+                            <label className="mb-2 block text-sm">
+                                Address
+                            </label>
+
+                            <input
+                                type="text"
+                                name="address"
+                                value={newListing.address}
+                                onChange={handleInputChange}
+                                placeholder="Street address"
+                                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none focus:border-[#17634f]"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="mb-2 block text-sm">
+                                Postal code
+                            </label>
+
+                            <input
+                                type="text"
+                                name="postalCode"
+                                value={newListing.postalCode}
+                                onChange={handleInputChange}
+                                placeholder="e.g. 00100"
+                                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none focus:border-[#17634f]"
+                            />
+                        </div>
+
+                    </div>
+
+
+                    {/* Main property details */}
+                    <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-4">
+
+                        <div>
+                            <label className="mb-2 block text-sm">
+                                Property type
+                            </label>
+
+                            <select
+                                name="propertyType"
+                                value={newListing.propertyType}
+                                onChange={handleInputChange}
+                                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-3 text-sm"
+                            >
+                                <option value="">Select type</option>
+                                <option value="apartment">Apartment</option>
+                                <option value="house">House</option>
+                                <option value="room">Room</option>
+                                <option value="studio">Studio</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label className="mb-2 block text-sm">
+                                Bedrooms
+                            </label>
+
+                            <input
+                                type="number"
+                                name="bedrooms"
+                                value={newListing.bedrooms}
+                                onChange={handleInputChange}
+                                className="w-full rounded-lg border border-gray-300 px-3 py-3 text-sm"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="mb-2 block text-sm">
+                                Bathrooms
+                            </label>
+
+                            <input
+                                type="number"
+                                name="bathrooms"
+                                value={newListing.bathrooms}
+                                onChange={handleInputChange}
+                                className="w-full rounded-lg border border-gray-300 px-3 py-3 text-sm"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="mb-2 block text-sm">
+                                Size (m²)
+                            </label>
+
+                            <input
+                                type="number"
+                                name="size"
+                                value={newListing.size}
+                                onChange={handleInputChange}
+                                placeholder="55"
+                                className="w-full rounded-lg border border-gray-300 px-3 py-3 text-sm"
+                            />
+                        </div>
+
+                    </div>
+
+
+                    {/* Rooms + condition */}
+                    <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2">
+
+                        <div>
+                            <label className="mb-2 block text-sm">
+                                Rooms
+                            </label>
+
+                            <input
+                                type="number"
+                                name="rooms"
+                                value={newListing.rooms}
+                                onChange={handleInputChange}
+                                className="w-full rounded-lg border border-gray-300 px-3 py-3 text-sm"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="mb-2 block text-sm">
+                                Condition
+                            </label>
+
+                            <select
+                                name="condition"
+                                value={newListing.condition}
+                                onChange={handleInputChange}
+                                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-3 text-sm"
+                            >
+                                <option value="">Select condition</option>
+                                <option value="new">New</option>
+                                <option value="excellent">Excellent</option>
+                                <option value="good">Good</option>
+                                <option value="needsRenovation">
+                                    Needs renovation
+                                </option>
+                            </select>
+                        </div>
+
+                    </div>
+
+
+                    {/* Features */}
+                    <div className="mt-5">
+
+                        <label className="mb-3 block text-sm">
+                            Features
+                        </label>
+
+                        <div className="grid grid-cols-2 gap-3 text-sm md:grid-cols-3">
+
+                            <label className="flex items-center gap-2">
+                                <input
+                                    type="checkbox"
+                                    value="balcony"
+                                    checked={newListing.features.includes("balcony")}
+                                    onChange={handleFeatureChange}
+                                />
+                                Balcony
+                            </label>
+
+                            <label className="flex items-center gap-2">
+                                <input
+                                    type="checkbox"
+                                    value="elevator"
+                                    checked={newListing.features.includes("elevator")}
+                                    onChange={handleFeatureChange}
+                                />
+                                Elevator
+                            </label>
+
+                            <label className="flex items-center gap-2">
+                                <input
+                                    type="checkbox"
+                                    value="parking"
+                                    checked={newListing.features.includes("parking")}
+                                    onChange={handleFeatureChange}
+                                />
+                                Parking
+                            </label>
+
+                            <label className="flex items-center gap-2">
+                                <input
+                                    type="checkbox"
+                                    value="furnished"
+                                    checked={newListing.features.includes("furnished")}
+                                    onChange={handleFeatureChange}
+                                />
+                                Furnished
+                            </label>
+
+                            <label className="flex items-center gap-2">
+                                <input
+                                    type="checkbox"
+                                    value="petsAllowed"
+                                    checked={newListing.features.includes("petsAllowed")}
+                                    onChange={handleFeatureChange}
+                                />
+                                Pets allowed
+                            </label>
+
+                            <label className="flex items-center gap-2">
+                                <input
+                                    type="checkbox"
+                                    value="sauna"
+                                    checked={newListing.features.includes("sauna")}
+                                    onChange={handleFeatureChange}
+                                />
+                                Sauna
+                            </label>
+
+                        </div>
+                    </div>
+
+
+                    {/* Description */}
+                    <div className="mt-5">
+
+                        <label className="mb-2 block text-sm">
+                            Description *
+                        </label>
+
+                        <textarea
+                            value={newListing.description}
+                            name="description"
+                            onChange={handleInputChange}
+                            placeholder="Describe your property..."
+                            rows="4"
+                            className="w-full resize-none rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none focus:border-[#17634f]"
+                        />
+
+                    </div>
+
                 </div>
 
-                <div>
-                    <label>Address</label>
-                    <input
-                        type="text"
-                        name="address"
-                        value={newListing.address}
-                        onChange={handleInputChange}
-                    />
-                </div>
 
-                <div>
-                    <label>Postal code</label>
-                    <input
-                        type="text"
-                        name="postalCode"
-                        value={newListing.postalCode}
-                        onChange={handleInputChange}
-                    />
-                </div>
+                {/* RENTAL DETAILS */}
+                {listingType === "forRent" && (
+                    <div className="mt-5 rounded-xl border border-gray-200 bg-white p-6">
 
-                <div>
-                    <label>Property type</label>
-                    <select
-                        name="propertyType"
-                        value={newListing.propertyType}
-                        onChange={handleInputChange}
+                        <h2 className="mb-5 font-semibold text-[#08243f]">
+                            Rental details
+                        </h2>
+
+                        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+
+                            <div>
+                                <label className="mb-2 block text-sm">
+                                    Monthly rent (€) *
+                                </label>
+
+                                <input
+                                    type="text"
+                                    value={newListing.monthlyRent}
+                                    name="monthlyRent"
+                                    onChange={handleInputChange}
+                                    placeholder="e.g. 1200"
+                                    className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="mb-2 block text-sm">
+                                    Available from *
+                                </label>
+
+                                <input
+                                    type="date"
+                                    value={newListing.availableFrom}
+                                    name="availableFrom"
+                                    onChange={handleInputChange}
+                                    className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm"
+                                />
+                            </div>
+
+
+                            <div>
+                                <label className="mb-2 block text-sm">
+                                    Security deposit (€)
+                                </label>
+
+                                <input
+                                    type="text"
+                                    value={newListing.securityDeposit}
+                                    name="securityDeposit"
+                                    onChange={handleInputChange}
+                                    placeholder="e.g. 2400"
+                                    className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm"
+                                />
+                            </div>
+
+
+                            <div>
+                                <label className="mb-2 block text-sm">
+                                    Minimum rental period
+                                </label>
+
+                                <select
+                                    value={newListing.minimumRentalPeriod}
+                                    name="minimumRentalPeriod"
+                                    onChange={handleInputChange}
+                                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm"
+                                >
+                                    <option value="">
+                                        Select rental period
+                                    </option>
+                                    <option value="1 Month">1 month</option>
+                                    <option value="3 Months">3 months</option>
+                                    <option value="6 Months">6 months</option>
+                                    <option value="12 Months">12 months</option>
+                                    <option value="24 Months">24 months</option>
+                                    <option value="No minimum">No minimum</option>
+                                </select>
+                            </div>
+
+
+                            <div>
+                                <label className="mb-2 block text-sm">
+                                    Additional costs / Utilities (€)
+                                </label>
+
+                                <input
+                                    type="text"
+                                    value={newListing.additionalCosts}
+                                    name="additionalCosts"
+                                    onChange={handleInputChange}
+                                    placeholder="e.g. 40 €/month"
+                                    className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm"
+                                />
+                            </div>
+
+                        </div>
+
+                    </div>
+                )}
+
+
+                {/* SALE DETAILS */}
+                {listingType === "forSale" && (
+                    <div className="mt-5 rounded-xl border border-gray-200 bg-white p-6">
+
+                        <h2 className="mb-5 font-semibold text-[#08243f]">
+                            Sale details
+                        </h2>
+
+                        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+
+                            <div>
+                                <label className="mb-2 block text-sm">
+                                    Price (€)
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="price"
+                                    value={newListing.price}
+                                    onChange={handleInputChange}
+                                    placeholder="e.g. 350000"
+                                    className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="mb-2 block text-sm">
+                                    Available from
+                                </label>
+
+                                <input
+                                    type="date"
+                                    name="availableFrom"
+                                    value={newListing.availableFrom}
+                                    onChange={handleInputChange}
+                                    className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm"
+                                />
+                            </div>
+
+                        </div>
+
+                    </div>
+                )}
+
+
+                {/* PHOTOS */}
+                <div className="mt-5 rounded-xl border border-gray-200 bg-white p-6">
+
+                    <h2 className="font-semibold text-[#08243f]">
+                        Property photos
+                    </h2>
+
+                    <label
+                        className="
+                            mt-4
+                            flex cursor-pointer
+                            items-center justify-center
+                            rounded-lg
+                            border-2 border-dashed border-gray-300
+                            py-6
+                            text-sm
+                            text-[#08243f]
+                            hover:bg-gray-50
+                        "
                     >
-                        <option value="">Select property type</option>
-                        <option value="apartment">Apartment</option>
-                        <option value="house">House</option>
-                        <option value="room">Room</option>
-                        <option value="studio">Studio</option>
-                    </select>
+                        + Upload photos
+
+                        <input
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            onChange={handlePhotoChange}
+                            className="hidden"
+                        />
+                    </label>
+
+                    {/* Image placeholders */}
+                    <div className="mt-4 grid grid-cols-1 gap-5 md:grid-cols-3">
+
+                        <div className="flex h-24 items-center justify-center rounded-lg bg-gray-100 text-xs text-gray-400">
+                            Image placeholder
+                        </div>
+
+                        <div className="flex h-24 items-center justify-center rounded-lg bg-gray-100 text-xs text-gray-400">
+                            Image placeholder
+                        </div>
+
+                        <div className="flex h-24 items-center justify-center rounded-lg bg-gray-100 text-xs text-gray-400">
+                            Image placeholder
+                        </div>
+
+                    </div>
+
                 </div>
 
-                <div>
-                    <label>Rooms</label>
-                    <input
-                        type="number"
-                        name="rooms"
-                        value={newListing.rooms}
-                        onChange={handleInputChange}
-                    />
-                </div>
 
-                <div>
-                    <label>Bedrooms</label>
-                    <input
-                        type="number"
-                        name="bedrooms"
-                        value={newListing.bedrooms}
-                        onChange={handleInputChange}
-                    />
-                </div>
+                {/* BUTTONS */}
+                <div className="mt-6 flex justify-end gap-4">
 
-                <div>
-                    <label>Bathrooms</label>
-                    <input
-                        type="number"
-                        name="bathrooms"
-                        value={newListing.bathrooms}
-                        onChange={handleInputChange}
-                    />
-                </div>
-
-                <div>
-                    <label>Size</label>
-                    <input
-                        type="number"
-                        name="size"
-                        value={newListing.size}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                <div>
-                    <label>Condition</label>
-                    <select
-                        name="condition"
-                        value={newListing.condition}
-                        onChange={handleInputChange}
+                    <button
+                        type="button"
+                        className="
+                            rounded-lg
+                            border border-gray-300
+                            bg-white
+                            px-8 py-3
+                            text-sm
+                            text-[#08243f]
+                        "
                     >
-                        <option value="">Select condition</option>
-                        <option value="new">New</option>
-                        <option value="excellent">Excellent</option>
-                        <option value="good">Good</option>
-                        <option value="needsRenovation">Needs renovation</option>
-                    </select>
+                        Save draft
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={addListing}
+                        className="
+                            rounded-lg
+                            bg-[#17634f]
+                            px-8 py-3
+                            text-sm
+                            font-medium
+                            text-white
+                            hover:bg-[#12503f]
+                        "
+                    >
+                        Publish listing
+                    </button>
 
                 </div>
 
-                <div>
-                    <label>Features</label>
-
-                    <div>
-                        <label>
-                            <input
-                                type="checkbox"
-                                value="balcony"
-                                checked={newListing.features.includes("balcony")}
-                                onChange={handleFeatureChange}
-                            />
-                            Balcony
-                        </label>
-
-                        <label>
-                            <input
-                                type="checkbox"
-                                value="elevator"
-                                checked={newListing.features.includes("elevator")}
-                                onChange={handleFeatureChange}
-                            />
-                            Elevator
-                        </label>
-
-                        <label>
-                            <input
-                                type="checkbox"
-                                value="parking"
-                                checked={newListing.features.includes("parking")}
-                                onChange={handleFeatureChange}
-                            />
-                            Parking
-                        </label>
-
-                        <label>
-                            <input
-                                type="checkbox"
-                                value="furnished"
-                                checked={newListing.features.includes("furnished")}
-                                onChange={handleFeatureChange}
-                            />
-                            Furnished
-                        </label>
-
-                        <label>
-                            <input
-                                type="checkbox"
-                                value="petsAllowed"
-                                checked={newListing.features.includes("petsAllowed")}
-                                onChange={handleFeatureChange}
-                            />
-                            Pets allowed
-                        </label>
-
-                        <label>
-                            <input
-                                type="checkbox"
-                                value="sauna"
-                                checked={newListing.features.includes("sauna")}
-                                onChange={handleFeatureChange}
-                            />
-                            Sauna
-                        </label>
-                    </div>
-                </div>
-                <div>
-                    <label>Description</label>
-                    <input
-                        type="text"
-                        value={newListing.description}
-                        name="description"
-                        onChange={handleInputChange}
-                    />
-                </div>
             </div>
-            {listingType === "forRent" && (
-                <div>
-                    <div>Rental details</div>
-                    <div>
-                        <label>Monthly rent (€)</label>
-                        <input
-                            type="text"
-                            value={newListing.monthlyRent}
-                            name="monthlyRent"
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div>
-                        <label>Available from </label>
-                        <input
-                            type="date"
-                            value={newListing.availableFrom}
-                            name="availableFrom"
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div>
-                        <label>Security deposit (€)</label>
-                        <input
-                            type="text"
-                            value={newListing.securityDeposit}
-                            name="securityDeposit"
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div>
-                        <label>Minimum rental period </label>
-                        <select
-                            value={newListing.minimumRentalPeriod}
-                            name="minimumRentalPeriod"
-                            onChange={handleInputChange}>
-                            <option value="">Select a minimum rental period</option>
-                            <option value="1 Month">1 month</option>
-                            <option value="3 Months">3 months</option>
-                            <option value="6 Months">6 months</option>
-                            <option value="12 Months">12 months</option>
-                            <option value="24 Months">24 months</option>
-                            <option value="No minimum">No minimum</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Additional costs/Utilities (€) </label>
-                        <input
-                            type="text"
-                            value={newListing.additionalCosts}
-                            name="additionalCosts"
-                            onChange={handleInputChange}
-                        ></input>
-                    </div>
-                </div>
-            )}
-            {listingType === "forSale" && (
-                <div>
-                    <div>Sale details</div>
-                    <div>
-                        <label>Price (€)</label>
-                        <input
-                            type="text"
-                            name="price"
-                            value={newListing.price}
-                            onChange={handleInputChange}
-                        ></input>
-                    </div>
-                    <div>
-                        <label>Available from</label>
-                        <input
-                            type="date"
-                            name="availableFrom"
-                            value={newListing.availableFrom}
-                            onChange={handleInputChange}
-                        ></input>
-                    </div>
-                </div>
-            )}
-            <div>
-                <label>Property photos</label>
-
-                <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={handlePhotoChange}
-                />
-            </div>
-            <button type="button" onClick={addListing}>
-                Add listing
-            </button>
         </div>
     );
 };

@@ -55,11 +55,6 @@ const Footer = () => {
       <h3 className="mb-4 text-lg font-bold">Helpful Links</h3>
 
       <ul className="space-y-2 text-black-600">
-        <li>
-          <Link to="/contact" className="transition-colors hover:text-[#1f7356]">
-            Contact
-          </Link>
-        </li>
 
         <li>
           <a href="#" className="transition-colors hover:text-[#1f7356]">

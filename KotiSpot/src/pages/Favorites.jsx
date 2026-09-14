@@ -7,8 +7,8 @@ const Favorites = ({ favorites, setFavorites }) => {
     );
 
     return (
-        <div>
-            <h1>Favorites</h1>
+        <div className="pb-30">
+            <h1 className="text-3xl px-10 mb-7 font-bold text-[#08243f]"> Favorites</h1>
             {favoriteProperties.length === 0 ? (
                 <p>No favorite properties yet.</p>
             ) : (
@@ -16,6 +16,7 @@ const Favorites = ({ favorites, setFavorites }) => {
                     properties={favoriteProperties}
                     favorites={favorites}
                     setFavorites={setFavorites}
+                
                 />
             )}
         </div>
