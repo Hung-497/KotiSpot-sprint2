@@ -1,14 +1,12 @@
 import Properties from "../components/properties";
 import { properties } from "../../data";
-import {
-  Search,
-  SlidersHorizontal,
-  Star,
-  Heart,
-} from "lucide-react";
+import PropertySearch from "../components/PropertySearch";
+import { Star, Heart } from "lucide-react";
+import { useState } from "react";
 
 const Rent = ( {favorites, setFavorites} ) => {
     const forRentProperties = properties.filter((property) => property.listingType === "rent")
+    const [visibleProperties, setVisibleProperties] = useState(forRentProperties);
 
     return (
     <div className="Heading min-h-screen bg-[#f8faf9]">
@@ -28,44 +26,11 @@ const Rent = ( {favorites, setFavorites} ) => {
             Search for a house to rent
           </p>
 
-          <div className="flex overflow-hidden rounded-xl border border-gray-300">
-
-            <div className="relative flex-1">
-              <Search
-                size={20}
-                className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400"
-              />
-
-              <input
-                type="text"
-                placeholder="Search city, neighborhood or postal code"
-                className="
-                  w-full
-                  py-4
-                  pl-14
-                  pr-4
-                  text-sm
-                  text-[#08243f]
-                  outline-none
-                "
-              />
-            </div>
-
-            <button
-              className="
-                flex items-center gap-2
-                border-l border-gray-300
-                px-7
-                font-medium
-                text-[#08243f]
-                hover:bg-gray-50
-              "
-            >
-              <SlidersHorizontal size={19} />
-              Filter
-            </button>
-
-          </div>
+          <PropertySearch
+            properties={forRentProperties}
+            onResults={setVisibleProperties}
+            placeholder="Search city, neighborhood or postal code"
+          />
         </div>
 
         <div className="Discover mt-10">
@@ -112,7 +77,7 @@ const Rent = ( {favorites, setFavorites} ) => {
 
         <div className="Properties mt-6">
           <Properties
-            properties={forRentProperties}
+            properties={visibleProperties}
             favorites={favorites}
             setFavorites={setFavorites}
           />

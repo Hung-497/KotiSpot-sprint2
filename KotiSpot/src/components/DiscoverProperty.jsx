@@ -3,10 +3,10 @@ import Properties from "./properties"
 import { properties } from "../../data";
 import { Star, Heart } from "lucide-react";
 
-const DiscoverProperty = ({ favorites, setFavorites }) => {
+const DiscoverProperty = ({ properties: visibleProperties = properties, favorites, setFavorites }) => {
 
     const [activeTab, setActiveTab] = useState("recommendations")
-    const favoriteProperties = properties.filter((property) =>
+    const favoriteProperties = visibleProperties.filter((property) =>
         favorites.includes(property.id)
     );
     return (
@@ -37,7 +37,7 @@ const DiscoverProperty = ({ favorites, setFavorites }) => {
                 
                 {activeTab === "recommendations" ? (
                     <Properties
-                        properties={properties}
+                        properties={visibleProperties}
                         favorites={favorites}
                         setFavorites={setFavorites}
                     />

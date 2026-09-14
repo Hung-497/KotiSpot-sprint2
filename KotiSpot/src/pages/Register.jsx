@@ -1,11 +1,28 @@
 import { useNavigate, Link } from "react-router-dom";
 import logo from "../assets/KotiSpot_Logo.png";
+import { useState } from "react";
 
 const Register = ({ onRegister }) => {
     const navigate = useNavigate();
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [formError, setFormError] = useState("");
 
     const handleRegister = (e) => {
       e.preventDefault();
+        if (!name.trim()) {
+          setFormError("Please enter your full name.");
+          return;
+        }
+        if (!email.trim()) {
+          setFormError("Please enter your email.");
+          return;
+        }
+        if (!email.includes("@")) {
+          setFormError("Please enter a valid email address.");
+          return;
+        }
+        setFormError("");
         onRegister();
         navigate("/");
     };
@@ -26,12 +43,14 @@ const Register = ({ onRegister }) => {
 
         <form onSubmit={handleRegister} className="space-y-5">
 
+          {formError && <p role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{formError}</p>}
+
           <div>
             <label htmlFor="name" className="mb-2 block text-sm font-medium text-[#08243f]">
               Full name
             </label>
 
-            <input id="name" type="text" required className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-[#1f7356] focus:ring-1 focus:ring-[#1f7356]"/>
+            <input id="name" type="text" value={name} onChange={(event) => setName(event.target.value)} className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-[#1f7356] focus:ring-1 focus:ring-[#1f7356]"/>
           </div>
 
           <div>
@@ -39,7 +58,7 @@ const Register = ({ onRegister }) => {
               Email
             </label>
 
-            <input id="email" type="email" required className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-[#1f7356] focus:ring-1 focus:ring-[#1f7356]"/>
+            <input id="email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-[#1f7356] focus:ring-1 focus:ring-[#1f7356]"/>
           </div>
 
           <button type="submit" className="w-full rounded-lg bg-[#1f7356] py-3 font-medium text-white transition hover:bg-[#165942]">

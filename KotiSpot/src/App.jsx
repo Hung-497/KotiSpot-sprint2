@@ -20,12 +20,24 @@ import Notifications from "./pages/Notifications";
 import MyListings from "./pages/MyListings";
 import SellerDashboard from "./pages/SellerDashboard";
 import Listings from "./pages/Listings";
+import AdminPanel from "./pages/AdminPanel";
+import { properties } from "../data";
 import { useState } from "react";
 
 function App() {
     const [favorites, setFavorites] = useState([]);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [propertyListings, setPropertyListings] = useState([]);
+    const [moderationStatuses, setModerationStatuses] = useState(() =>
+        Object.fromEntries(properties.map((property) => [property.id, property.status || "active"]))
+    );
+
+    const moderateProperty = (propertyId, status, reason) => {
+        setModerationStatuses((currentStatuses) => ({
+            ...currentStatuses,
+            [propertyId]: { status, reason, updatedAt: new Date().toISOString() },
+        }));
+    };
 
     const deleteListing = (id) => {
         setPropertyListings((prevListings) =>
@@ -75,6 +87,16 @@ function App() {
                     <Route path="/mylistings" element={<MyListings propertyListings={propertyListings} deleteListing={deleteListing} updateListing={updateListing}/>}
                     />
                     <Route path="/profile" element={<Profile />}
+                    />
+                    <Route
+                        path="/adminpanel"
+                        element={
+                            <AdminPanel
+                                properties={properties}
+                                moderationStatuses={moderationStatuses}
+                                onModerate={moderateProperty}
+                            />
+                        }
                     />
                     <Route path="/contact" element={<Contact />}
                     />

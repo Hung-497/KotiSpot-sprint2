@@ -2,7 +2,7 @@ import { navLinks, authLinks } from "../../data";
 import logo from "../assets/KotiSpot_logo.png";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { User, Heart, House, Settings, Bell, BriefcaseBusiness, LogOut } from "lucide-react";
+import { User, Heart, House, Settings, Bell, BriefcaseBusiness, ShieldCheck, LogOut } from "lucide-react";
 
 const Navbar = ({ isLoggedIn, onLogout }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -89,6 +89,11 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
                             <Link to="/settings" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-4 rounded-xl px-4 py-3 text-sm text-[#08243f] transition hover:bg-[#eef6f2] hover:text-[#17634f]">
                                 <Settings size={20} strokeWidth={1.8} />
                                 Settings
+                            </Link>
+
+                            <Link to="/adminpanel" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-4 rounded-xl px-4 py-3 text-sm text-[#08243f] transition hover:bg-[#eef6f2] hover:text-[#17634f]">
+                                <ShieldCheck size={20} strokeWidth={1.8} />
+                                Admin panel
                             </Link>
 
                             <Link to="/applicationform" onClick={() => setIsMenuOpen(false)} className="flex items-start gap-4 rounded-xl px-4 py-3 text-sm text-[#08243f] transition hover:bg-[#eef6f2] hover:text-[#17634f]">

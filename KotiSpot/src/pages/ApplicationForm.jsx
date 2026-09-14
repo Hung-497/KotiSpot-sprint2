@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const ApplicationForm = () => {
   const [fullName, setFullName] = useState("");
@@ -10,6 +10,10 @@ const ApplicationForm = () => {
   const [location, setLocation] = useState("");
   const [licenseNumber, setLicenseNumber] = useState("");
   const [about, setAbout] = useState("");
+  const [governmentId, setGovernmentId] = useState(null);
+  const [realEstateLicense, setRealEstateLicense] = useState(null);
+  const [formError, setFormError] = useState("");
+  const navigate = useNavigate();
 
   const handleFullName = (event) => {
     setFullName(event.target.value);
@@ -27,11 +31,40 @@ const ApplicationForm = () => {
     setRole(event.target.value);
   };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const commonFields = [[fullName, "full name"], [email, "email"], [phoneNumber, "phone number"], [role, "account type"]];
+    const missingCommonField = commonFields.find(([value]) => !value.trim());
+
+    if (missingCommonField) {
+      setFormError(`Please fill in the ${missingCommonField[1]} field.`);
+      return;
+    }
+
+    if (!email.includes("@")) {
+      setFormError("Please enter a valid email address.");
+      return;
+    }
+
+    const roleFields = role === "seller"
+      ? [[governmentId, "government ID"]]
+      : [[location, "operating location"], [licenseNumber, "licence number"], [about, "about yourself"], [governmentId, "government ID"], [realEstateLicense, "real estate licence"]];
+    const missingRoleField = roleFields.find(([value]) => !value || !String(value).trim());
+
+    if (missingRoleField) {
+      setFormError(`Please provide your ${missingRoleField[1]}.`);
+      return;
+    }
+
+    setFormError("");
+    navigate("/applicationthankmessage");
+  };
+
   return (
     <div className="min-h-screen bg-[#f8faf9] px-6 py-10">
       <div className="mx-auto max-w-3xl">
 
-        <form className="rounded-2xl border border-gray-300 bg-white p-6">
+        <form onSubmit={handleSubmit} className="rounded-2xl border border-gray-300 bg-white p-6">
 
           <div className="relative mb-6">
 
@@ -51,6 +84,8 @@ const ApplicationForm = () => {
           <h2 className="mb-4 text-base font-semibold text-[#08243f]">
             Personal information
           </h2>
+
+          {formError && <p role="alert" className="mb-5 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{formError}</p>}
 
           <div className="space-y-4">
 
@@ -131,14 +166,15 @@ const ApplicationForm = () => {
                 <input
                   type="file"
                   accept="image/*"
+                  onChange={(event) => setGovernmentId(event.target.files[0] || null)}
                   className="text-sm"
                 />
 
               </div>
 
               <div className="mt-8 flex justify-end">
-                <Link
-                  to="/applicationthankmessage"
+                <button
+                  type="submit"
                   className="
                     rounded-full
                     bg-[#08243f]
@@ -149,7 +185,7 @@ const ApplicationForm = () => {
                   "
                 >
                   Submit
-                </Link>
+                </button>
               </div>
 
             </div>
@@ -275,6 +311,7 @@ const ApplicationForm = () => {
                     <input
                       type="file"
                       accept="image/*"
+                      onChange={(event) => setGovernmentId(event.target.files[0] || null)}
                       className="text-sm"
                     />
                   </div>
@@ -287,6 +324,7 @@ const ApplicationForm = () => {
                     <input
                       type="file"
                       accept="image/*"
+                      onChange={(event) => setRealEstateLicense(event.target.files[0] || null)}
                       className="text-sm"
                     />
                   </div>
@@ -296,8 +334,8 @@ const ApplicationForm = () => {
               </div>
 
               <div className="mt-8 flex justify-end">
-                <Link
-                  to="/applicationthankmessage"
+                <button
+                  type="submit"
                   className="
                     rounded-full
                     bg-[#08243f]
@@ -308,7 +346,7 @@ const ApplicationForm = () => {
                   "
                 >
                   Submit
-                </Link>
+                </button>
               </div>
 
             </div>

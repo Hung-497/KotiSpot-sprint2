@@ -3,6 +3,8 @@ import { useState } from "react";
 
 const Listings = ({ propertyListings, setPropertyListings }) => {
     const [listingType, setListingType] = useState("");
+    const [formMessage, setFormMessage] = useState("");
+    const [formError, setFormError] = useState("");
 
     const [newListing, setNewListing] = useState({
         title: "",
@@ -28,6 +30,8 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
+        setFormError("");
+        setFormMessage("");
 
         setNewListing((prevListing) => ({
             ...prevListing,
@@ -58,49 +62,60 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
     };
 
     const addListing = () => {
-        if (
-            newListing.title.trim() !== "" &&
-            newListing.location.trim() !== "" &&
-            newListing.address.trim() !== "" &&
-            newListing.postalCode.trim() !== "" &&
-            newListing.propertyType.trim() !== "" &&
-            newListing.bedrooms.trim() !== "" &&
-            newListing.bathrooms.trim() !== "" &&
-            newListing.size.trim() !== "" &&
-            newListing.rooms.trim() !== "" &&
-            newListing.description.trim() !== "" &&
-            newListing.availableFrom.trim() !== "" &&
-            newListing.condition.trim() !== ""
-        ) {
+        setFormError("");
+        setFormMessage("");
+
+        if (!listingType) {
+            setFormError("Please choose whether the property is for sale or for rent.");
+            return;
+        }
+
+        const requiredFields = [
+            ["title", "title"], ["location", "location"], ["address", "address"],
+            ["postalCode", "postal code"], ["propertyType", "property type"],
+            ["bedrooms", "bedrooms"], ["bathrooms", "bathrooms"], ["size", "size"],
+            ["rooms", "rooms"], ["description", "description"], ["availableFrom", "available date"],
+            ["condition", "condition"],
+        ];
+
+        const missingField = requiredFields.find(([field]) => !String(newListing[field]).trim());
+        if (missingField) {
+            setFormError(`Please fill in the ${missingField[1]} field.`);
+            return;
+        }
+
+        const listingSpecificFields = listingType === "forRent"
+            ? [["monthlyRent", "monthly rent"], ["securityDeposit", "security deposit"], ["minimumRentalPeriod", "minimum rental period"], ["additionalCosts", "additional costs"]]
+            : [["price", "price"]];
+        const missingListingField = listingSpecificFields.find(([field]) => !String(newListing[field]).trim());
+        if (missingListingField) {
+            setFormError(`Please fill in the ${missingListingField[1]} field.`);
+            return;
+        }
+
+        {
             const listingToAdd = {
                 ...newListing,
                 listingType: listingType,
                 id: Date.now()
             };
 
-            if (
-                listingType === "forRent" &&
-                newListing.monthlyRent.trim() !== "" &&
-                newListing.securityDeposit.trim() !== "" &&
-                newListing.minimumRentalPeriod.trim() !== "" &&
-                newListing.additionalCosts.trim() !== ""
-            ) {
+            if (listingType === "forRent") {
                 setPropertyListings((prevListings) => [
                     ...prevListings,
                     listingToAdd
                 ]);
             }
 
-            if (
-                listingType === "forSale" &&
-                newListing.price.trim() !== ""
-            ) {
+            if (listingType === "forSale") {
                 setPropertyListings((prevListings) => [
                     ...prevListings,
                     listingToAdd
                 ]);
             }
         }
+
+        setFormMessage("Listing published successfully.");
 
         setNewListing({
             title: "",
@@ -123,6 +138,7 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
             price: "",
             condition: ""
         });
+        setListingType("");
     };
 
     const handleListingType = (event) => {
@@ -149,6 +165,18 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
                 <p className="mt-1 text-sm text-gray-500">
                     Fill in the details below to list your property.
                 </p>
+
+                {formError && (
+                    <p role="alert" className="mt-4 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
+                        {formError}
+                    </p>
+                )}
+
+                {formMessage && (
+                    <p role="status" className="mt-4 rounded-lg bg-green-50 px-4 py-3 text-sm text-green-700">
+                        {formMessage}
+                    </p>
+                )}
 
 
                 {/* LISTING PURPOSE */}
@@ -232,7 +260,7 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
 
                         <div>
                             <label className="mb-2 block text-sm">
-                                Address
+                                Address *
                             </label>
 
                             <input
@@ -247,7 +275,7 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
 
                         <div>
                             <label className="mb-2 block text-sm">
-                                Postal code
+                                Postal code *
                             </label>
 
                             <input
@@ -268,7 +296,7 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
 
                         <div>
                             <label className="mb-2 block text-sm">
-                                Property type
+                                Property type *
                             </label>
 
                             <select
@@ -287,7 +315,7 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
 
                         <div>
                             <label className="mb-2 block text-sm">
-                                Bedrooms
+                                Bedrooms *
                             </label>
 
                             <input
@@ -301,7 +329,7 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
 
                         <div>
                             <label className="mb-2 block text-sm">
-                                Bathrooms
+                                Bathrooms *
                             </label>
 
                             <input
@@ -315,7 +343,7 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
 
                         <div>
                             <label className="mb-2 block text-sm">
-                                Size (m²)
+                                Size (m²) *
                             </label>
 
                             <input
@@ -336,7 +364,7 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
 
                         <div>
                             <label className="mb-2 block text-sm">
-                                Rooms
+                                Rooms *
                             </label>
 
                             <input
@@ -350,7 +378,7 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
 
                         <div>
                             <label className="mb-2 block text-sm">
-                                Condition
+                                Condition *
                             </label>
 
                             <select
@@ -376,7 +404,7 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
                     <div className="mt-5">
 
                         <label className="mb-3 block text-sm">
-                            Features
+                            Features *
                         </label>
 
                         <div className="grid grid-cols-2 gap-3 text-sm md:grid-cols-3">
@@ -471,7 +499,7 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
                     <div className="mt-5 rounded-xl border border-gray-200 bg-white p-6">
 
                         <h2 className="mb-5 font-semibold text-[#08243f]">
-                            Rental details
+                            Rental details 
                         </h2>
 
                         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
@@ -508,7 +536,7 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
 
                             <div>
                                 <label className="mb-2 block text-sm">
-                                    Security deposit (€)
+                                    Security deposit (€) *
                                 </label>
 
                                 <input
@@ -524,7 +552,7 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
 
                             <div>
                                 <label className="mb-2 block text-sm">
-                                    Minimum rental period
+                                    Minimum rental period *
                                 </label>
 
                                 <select
@@ -534,7 +562,7 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
                                     className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm"
                                 >
                                     <option value="">
-                                        Select rental period
+                                        Select rental period *
                                     </option>
                                     <option value="1 Month">1 month</option>
                                     <option value="3 Months">3 months</option>
@@ -548,7 +576,7 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
 
                             <div>
                                 <label className="mb-2 block text-sm">
-                                    Additional costs / Utilities (€)
+                                    Additional costs / Utilities (€) *
                                 </label>
 
                                 <input
@@ -572,14 +600,14 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
                     <div className="mt-5 rounded-xl border border-gray-200 bg-white p-6">
 
                         <h2 className="mb-5 font-semibold text-[#08243f]">
-                            Sale details
+                            Sale details 
                         </h2>
 
                         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
 
                             <div>
                                 <label className="mb-2 block text-sm">
-                                    Price (€)
+                                    Price (€) *
                                 </label>
 
                                 <input
@@ -594,7 +622,7 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
 
                             <div>
                                 <label className="mb-2 block text-sm">
-                                    Available from
+                                    Available from *
                                 </label>
 
                                 <input

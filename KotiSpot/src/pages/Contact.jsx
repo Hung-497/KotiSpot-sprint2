@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 const Contact = () => {
@@ -6,6 +6,22 @@ const Contact = () => {
     const [email, setEmail] = useState("")
     const [subject, setSubject] = useState("")
     const [message, setMessage] = useState("")
+    const [formError, setFormError] = useState("")
+    const navigate = useNavigate();
+
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      const fields = [[fullName, "full name"], [email, "email"], [subject, "subject"], [message, "message"]];
+      const missingField = fields.find(([value]) => !value.trim());
+
+      if (missingField) {
+        setFormError(`Please fill in the ${missingField[1]} field.`);
+        return;
+      }
+
+      setFormError("");
+      navigate("/contactthankmessage");
+    };
 
     return (
     <div className="min-h-screen bg-[#f8faf9] px-6 py-10">
@@ -19,11 +35,13 @@ const Contact = () => {
           We're here to help. Send us a message and we'll get back to you.
         </p>
 
-        <form className="mt-8 rounded-xl border border-gray-200 bg-white p-6">
+        <form onSubmit={handleSubmit} className="mt-8 rounded-xl border border-gray-200 bg-white p-6">
 
           <h2 className="mb-6 text-lg font-semibold text-[#08243f]">
             Send us a message
           </h2>
+
+          {formError && <p role="alert" className="mb-5 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{formError}</p>}
 
           <div className="mb-5">
             <label className="mb-2 block text-sm font-medium text-[#08243f]">
@@ -125,8 +143,8 @@ const Contact = () => {
             />
           </div>
 
-          <Link
-            to="/contactthankmessage"
+          <button
+            type="submit"
             className="
               inline-block
               rounded-lg
@@ -139,7 +157,7 @@ const Contact = () => {
             "
           >
             Send message
-          </Link>
+          </button>
 
         </form>
 

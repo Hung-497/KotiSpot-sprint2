@@ -1,9 +1,12 @@
 import DiscoverProperty from "../components/DiscoverProperty";
-import { Search, Star, Heart } from "lucide-react";
-import { Link } from "react-router-dom";
+import PropertySearch from "../components/PropertySearch";
+import { properties } from "../../data";
 import realestate from "../assets/realestate.jpg";
+import { useState } from "react";
 
 const Home = ({ favorites, setFavorites }) => {
+  const [visibleProperties, setVisibleProperties] = useState(properties);
+
   return (
     <main className="bg-white">
 
@@ -39,39 +42,12 @@ const Home = ({ favorites, setFavorites }) => {
 
         <div className="absolute bottom-8 left-1/2 w-130 -translate-x-1/2">
 
-          <div className="flex items-center rounded-full bg-white p-2 shadow-md">
-
-            <Search
-              size={18}
-              className="ml-3 text-gray-400"
-            />
-
-            <input
-              type="text"
-              placeholder="Search by city, area, or property type..."
-              className="
-                flex-1
-                px-4 py-2
-                text-sm
-                text-[#08243f]
-                outline-none
-              "
-            />
-
-            <button
-              className="
-                rounded-full
-                bg-[#17634f]
-                px-8 py-2.5
-                text-sm
-                font-medium
-                text-white
-              "
-            >
-              Search
-            </button>
-
-          </div>
+          <PropertySearch
+            properties={properties}
+            onResults={setVisibleProperties}
+            placeholder="Search by city, area, or property type..."
+            compact
+          />
         </div>
 
       </section>
@@ -87,17 +63,11 @@ const Home = ({ favorites, setFavorites }) => {
               Discover properties
             </h2>
 
-            <Link
-              to="/buy"
-              className="text-sm text-blue-600 underline"
-            >
-              View all properties →
-            </Link>
-
           </div>
 
           <div className="mt-6">
             <DiscoverProperty          
+              properties={visibleProperties}
               favorites={favorites}
               setFavorites={setFavorites}
             />

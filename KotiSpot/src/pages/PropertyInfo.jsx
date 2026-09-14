@@ -89,7 +89,7 @@ const PropertyInfo = ({ property, favorites, setFavorites }) => {
 
             <h2 className="mt-4 text-3xl font-medium text-[#08243f]">
               {selectedProperty.price} €
-              {selectedProperty.listingType === "rent" && "/month"}
+              {(selectedProperty.listingType === "rent" || selectedProperty.listingType === "forRent") && " / month"}
             </h2>
 
             <hr className="my-5 border-gray-300" />

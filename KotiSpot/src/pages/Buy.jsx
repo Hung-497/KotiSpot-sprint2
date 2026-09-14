@@ -1,9 +1,12 @@
 import Properties from "../components/properties";
 import { properties } from "../../data";
-import { Search, SlidersHorizontal, Star, Heart } from "lucide-react";
+import PropertySearch from "../components/PropertySearch";
+import { Star, Heart } from "lucide-react";
+import { useState } from "react";
 
 const Buy = ({ favorites, setFavorites }) => {
     const propertiesForSale = properties.filter((property) => property.listingType === "sale");
+  const [visibleProperties, setVisibleProperties] = useState(propertiesForSale);
 
     return (
     <div className="min-h-screen bg-[#f8faf9]">
@@ -21,60 +24,12 @@ const Buy = ({ favorites, setFavorites }) => {
 
         <div className="mb-10 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
 
-          <p className="mb-3 text-sm font-medium text-[#08243f]">
-            Search for a house to buy
-          </p>
-
-          <div className="flex w-full">
-
-            <div className="relative flex-1">
-              <Search
-                size={18}
-                className="
-                  absolute left-4 top-1/2
-                  -translate-y-1/2
-                  text-gray-400
-                "
-              />
-
-              <input
-                type="text"
-                placeholder="Search city, neighborhood or postal code"
-                className="
-                  w-full
-                  rounded-l-xl
-                  border border-gray-300
-                  bg-white
-                  py-3
-                  pl-11 pr-4
-                  text-sm
-                  text-[#08243f]
-                  outline-none
-                  transition
-                  focus:border-[#17634f]
-                "
-              />
-            </div>
-
-            <button
-              className="
-                flex items-center gap-2
-                rounded-r-xl
-                border border-l-0 border-gray-300
-                bg-white
-                px-6
-                text-sm font-medium
-                text-[#08243f]
-                transition
-                hover:bg-[#eef6f2]
-                hover:text-[#17634f]
-              "
-            >
-              <SlidersHorizontal size={17} />
-              Filter
-            </button>
-
-          </div>
+          <p className="mb-3 text-sm font-medium text-[#08243f]">Search for a house to buy</p>
+          <PropertySearch
+            properties={propertiesForSale}
+            onResults={setVisibleProperties}
+            placeholder="Search city, neighborhood or postal code"
+          />
         </div>
 
         <div className="mb-6">
@@ -88,7 +43,7 @@ const Buy = ({ favorites, setFavorites }) => {
             </div>
 
             <p className="text-sm text-gray-400">
-              {propertiesForSale.length} properties
+              {visibleProperties.length} properties
             </p>
 
           </div>
@@ -135,7 +90,7 @@ const Buy = ({ favorites, setFavorites }) => {
 
         <div>
           <Properties
-            properties={propertiesForSale}
+            properties={visibleProperties}
             favorites={favorites}
             setFavorites={setFavorites}
           />
