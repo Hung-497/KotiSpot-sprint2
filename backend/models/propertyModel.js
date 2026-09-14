@@ -132,7 +132,7 @@ const moderationSchema = new Schema(
       type: String,
       required: true,
       enum: ["unreviewed", "flagged", "approved", "removed"],
-      default: "unreviewed",
+      default: "approved", // Default to "approved" for sprint 2, default to "unreviewed" for sprint 3
     },
     reason: {
       type: String,
@@ -260,7 +260,7 @@ const propertySchema = new Schema(
     },
     moderation: {
       type: moderationSchema,
-      default: () => ({ status: "unreviewed" }),
+      default: () => ({ status: "approved" }), // Default to "approved" for sprint 2, default to "unreviewed" for sprint 3
     },
     status: {
       type: String,
