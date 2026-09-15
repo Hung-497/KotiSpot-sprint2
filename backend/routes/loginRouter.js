@@ -1,23 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const {
-  getCurrentUser,
-  requestCode,
-  verifyCode,
-  logout,
+  simulateLogin,
+  simulateRegistration,
+  simulateLogout,
 } = require('../controllers/loginControllers');
 
-// GET /me for current user
-router.get('/me', getCurrentUser);
+// POST /login
+router.post('/login', simulateLogin);
 
-// POST /request-code to request a login code
-router.post('/request-code', requestCode);
+// POST /register
+router.post('/register', simulateRegistration);
 
-// POST /verify-code to verify the code — creates the account on first login
-// New accounts must provide firstName and lastName
-router.post('/verify-code', verifyCode);
-
-// POST /logout to Logout
-router.post('/logout', logout);
+// POST /logout
+router.post('/logout', simulateLogout);
 
 module.exports = router;

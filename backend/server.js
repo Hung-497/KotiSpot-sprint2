@@ -5,6 +5,7 @@ const propertyRouter = require('./routes/propertyRouter');
 const favouritesRouter = require('./routes/favouritesRouter')
 const moderationRouter = require('./routes/moderationRouter');
 const userRouter = require('./routes/userRouter');
+const loginRouter = require('./routes/loginRouter');
 
 require('dotenv').config();
 
@@ -18,6 +19,7 @@ app.use('/api/properties', propertyRouter);
 app.use('/api/favourites', favouritesRouter);
 app.use('/api/moderation', moderationRouter);
 app.use('/api/users', userRouter);
+app.use('/api/account', loginRouter);
 
 const port = process.env.PORT || 4000;
 // Start the server
