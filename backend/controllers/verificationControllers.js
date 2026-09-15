@@ -1,174 +1,226 @@
-const path = require('path');
-const fs = require('fs');
-const crypto = require('crypto');
-const multer = require('multer');
-const VerificationRequest = require('../models/verificationModel');
-const User = require('../models/userModel');
+const Verification = require("../models/verificationModel");
+const User = require("../models/userModel");
 
+const parseUserId = (value) => {
+  const userId = Number(value);
 
-const UPLOAD_DIR = path.join(__dirname, '..', 'public', 'uploads', 'verification');
-fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+  if (!Number.isInteger(userId) || userId <= 0) {
+    return null;
+  }
 
-const ALLOWED_MIME = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
-const EXT_BY_MIME = {
-    'image/jpeg': '.jpg',
-    'image/png': '.png',
-    'image/webp': '.webp',
-    'application/pdf': '.pdf'
+  return userId;
 };
 
-const upload = multer({
-    storage: multer.diskStorage({
-        destination: UPLOAD_DIR,
-        filename: (req, file, cb) => {
-            const ext = EXT_BY_MIME[file.mimetype] || '.bin';
-            cb(null, `${req.session.userId}-${Date.now()}-${crypto.randomBytes(4).toString('hex')}${ext}`);
-        }
-    }),
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB per file
-    fileFilter: (req, file, cb) => {
-        if (!ALLOWED_MIME.includes(file.mimetype)) {
-            return cb(new Error('Only JPG, PNG, WebP, or PDF files are allowed'));
-        }
-        cb(null, true);
+const createVerification = async (req, res) => {
+  const userId = parseUserId(req.params.userId);
+
+  if (userId === null) {
+    return res.status(400).json({ message: "Invalid user ID" });
+  }
+
+  try {
+    const user = await User.findOne({ userId });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
     }
-});
 
-const uploadFields = upload.fields([
-    { name: 'idDocument', maxCount: 1 },
-    { name: 'licenseDocument', maxCount: 1 }
-]);
-
-const getLatestVerif = async (req, res) => {
-    try {
-        const request = await VerificationRequest.findOne({ user: req.session.userId })
-            .sort({ createdAt: -1 });
-        const user = await User.findById(req.session.userId).select('verifiedRole verifiedAt');
-        res.json({ request, verifiedRole: user.verifiedRole, verifiedAt: user.verifiedAt });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Error loading verification status' });
-    }
-};
-
-const createVerif = (req, res) => {
-    uploadFields(req, res, async (uploadErr) => {
-        try {
-            if (uploadErr) {
-                const msg = uploadErr.code === 'LIMIT_FILE_SIZE'
-                    ? 'Files must be 5 MB or smaller'
-                    : uploadErr.message;
-                return res.status(400).json({ error: msg });
-            }
-
-            const { role, fullName, companyName, phone, email, areas, yearsExperience, licenseNumber, bio } = req.body;
-
-            if (!['seller', 'agent'].includes(role)) {
-                return res.status(400).json({ error: 'Please select a valid role' });
-            }
-            if (!fullName || !phone || !email || !bio) {
-                return res.status(400).json({ error: 'Full name, phone, email, and description are required' });
-            }
-            if (!req.files?.idDocument?.[0]) {
-                return res.status(400).json({ error: 'Identification document is required' });
-            }
-            if (role === 'agent' && !req.files?.licenseDocument?.[0]) {
-                return res.status(400).json({ error: 'Licence/certification document is required for agents' });
-            }
-
-            // Only one open application at a time
-            const pending = await VerificationRequest.findOne({ user: req.session.userId, status: 'pending' });
-            if (pending) {
-                return res.status(400).json({ error: 'You already have a pending application' });
-            }
-
-            // Already verified users can't re-apply for the same role
-            const user = await User.findById(req.session.userId);
-            if (user.verifiedRole) {
-                return res.status(400).json({ error: `You are already a verified ${user.verifiedRole}` });
-            }
-
-            const request = await VerificationRequest.create({
-                user: req.session.userId,
-                role,
-                fullName,
-                companyName: role === 'agent' ? companyName : undefined,
-                phone,
-                email,
-                areas: role === 'agent' ? areas : undefined,
-                yearsExperience: role === 'agent' && yearsExperience ? parseInt(yearsExperience, 10) : undefined,
-                licenseNumber: role === 'agent' ? licenseNumber : undefined,
-                bio,
-                idDocument: `/uploads/verification/${req.files.idDocument[0].filename}`,
-                licenseDocument: req.files?.licenseDocument?.[0]
-                    ? `/uploads/verification/${req.files.licenseDocument[0].filename}`
-                    : undefined
-            });
-
-            res.status(201).json({ request });
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ error: 'Error submitting application' });
-        }
+    const existingRequest = await Verification.findOne({
+      userId,
+      status: "pending",
     });
+
+    if (existingRequest) {
+      return res.status(409).json({
+        message: "A pending verification request already exists for this user",
+      });
+    }
+
+    const {
+      role,
+      fullName,
+      companyName,
+      phone,
+      email,
+      areas,
+      yearsExperience,
+      licenseNumber,
+      bio,
+      idDocument,
+      licenseDocument,
+    } = req.body ?? {};
+
+    if (!["seller", "agent"].includes(role)) {
+      return res.status(400).json({
+        message: "Role must be seller or agent",
+      });
+    }
+
+    if (!idDocument?.trim()) {
+      return res.status(400).json({
+        message: "ID document is required",
+      });
+    }
+
+    if (role === "agent" && !licenseDocument?.trim()) {
+      return res.status(400).json({
+        message: "License/certification document is required for agents",
+      });
+    }
+
+    const verificationRequest = await Verification.create({
+      userId,
+      role,
+      fullName,
+      companyName,
+      phone,
+      email,
+      areas,
+      yearsExperience,
+      licenseNumber,
+      bio,
+      idDocument,
+      licenseDocument: role === "agent" ? licenseDocument : undefined,
+    });
+
+    res.status(201).json(verificationRequest);
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      return res
+        .status(400)
+        .json({ message: "Invalid verification request data" });
+    }
+
+    res.status(500).json({ message: "Failed to create verification request" });
+  }
 };
 
-// --- Admin controllers ---
+const getUserVerification = async (req, res) => {
+  const userId = parseUserId(req.params.userId);
 
-//query -> default: pending
-const getApplications = async (req, res) => {
-    try {
-        const status = ['pending', 'approved', 'rejected'].includes(req.query.status)
-            ? req.query.status
-            : 'pending';
-        const requests = await VerificationRequest.find({ status })
-            .populate('user', 'username email')
-            .sort({ createdAt: -1 });
-        res.json({ requests });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Error loading applications' });
+  if (userId === null) {
+    return res.status(400).json({ message: "Invalid user ID" });
+  }
+
+  try {
+    const verificationRequest = await Verification.findOne({ userId }).sort({
+      createdAt: -1,
+    });
+
+    if (!verificationRequest) {
+      return res
+        .status(404)
+        .json({ message: "Verification request not found for this user" });
     }
+
+    res.status(200).json(verificationRequest);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failed to retrieve verification request" });
+  }
+};
+
+const getApplications = async (req, res) => {
+  const { status } = req.query;
+
+  if (status && !["pending", "approved", "rejected"].includes(status)) {
+    return res.status(400).json({
+      message: "Invalid verification status",
+    });
+  }
+
+  try {
+    const filter = status ? { status } : {};
+
+    const applications = await Verification.find(filter).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json(applications);
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to retrieve verification applications",
+    });
+  }
 };
 
 const reviewApplication = async (req, res) => {
-    try {
-        const { action, reviewNote } = req.body;
-        if (!['approve', 'reject'].includes(action)) {
-            return res.status(400).json({ error: 'Invalid action' });
-        }
+  const { applicationId } = req.params;
 
-        const request = await VerificationRequest.findById(req.params.id);
-        if (!request) {
-            return res.status(404).json({ error: 'Application not found' });
-        }
-        if (request.status !== 'pending') {
-            return res.status(400).json({ error: 'This application has already been reviewed' });
-        }
+  const { status, reviewedBy, reviewNote, rejectionReason } = req.body ?? {};
 
-        request.status = action === 'approve' ? 'approved' : 'rejected';
-        request.reviewedBy = req.session.userId;
-        request.reviewNote = reviewNote || undefined;
-        request.reviewedAt = new Date();
-        await request.save();
+  if (!["approved", "rejected"].includes(status)) {
+    return res.status(400).json({
+      message: 'Invalid status. Must be either "approved" or "rejected".',
+    });
+  }
 
-        if (action === 'approve') {
-            await User.findByIdAndUpdate(request.user, {
-                verifiedRole: request.role,
-                verifiedAt: new Date()
-            });
-        }
+  const reviewerId = parseUserId(reviewedBy);
 
-        res.json({ request });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Error reviewing application' });
+  if (reviewerId === null) {
+    return res.status(400).json({
+      message: "Invalid reviewedBy user ID",
+    });
+  }
+
+  if (status === "rejected" && (!rejectionReason || !rejectionReason.trim())) {
+    return res.status(400).json({
+      message: "Rejection reason is required",
+    });
+  }
+
+  try {
+    const verificationRequest = await Verification.findById(applicationId);
+    if (!verificationRequest) {
+      return res
+        .status(404)
+        .json({ message: "Verification request not found for this user" });
     }
+
+    if (verificationRequest.status !== "pending") {
+      return res.status(409).json({
+        message: "This verification application has already been reviewed",
+      });
+    }
+
+    verificationRequest.status = status;
+    verificationRequest.reviewedBy = reviewerId;
+    verificationRequest.reviewedAt = new Date();
+    verificationRequest.reviewNote = reviewNote || undefined;
+
+    verificationRequest.rejectionReason =
+      status === "rejected" ? rejectionReason.trim() : undefined;
+
+    await verificationRequest.save();
+
+    if (status === "approved") {
+      await User.findOneAndUpdate(
+        { userId: verificationRequest.userId },
+        { role: verificationRequest.role, verifiedAt: new Date() },
+        { returnDocument: "after", runValidators: true },
+      );
+    }
+
+    res.status(200).json(verificationRequest);
+  } catch (error) {
+    if (error.name === "CastError") {
+      return res.status(400).json({
+        message: "Invalid application ID",
+      });
+    }
+
+    res.status(500).json({
+      message: "Failed to review verification application",
+    });
+  }
 };
 
 module.exports = {
-    getLatestVerif,
-    createVerif,
-    getApplications,
-    reviewApplication,
-}
+  createVerification,
+  getUserVerification,
+  getApplications,
+  reviewApplication,
+};
