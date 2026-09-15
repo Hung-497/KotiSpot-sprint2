@@ -1,16 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const {
-    getProfile,
     getAllUsers,
     getUserById,
     createUser,
     updateUser,
     deleteUser,
 } = require('../controllers/userControllers');
-
-// GET /users/profile/:userId for user profile by Id
-router.get('/profile/:userId', getProfile);
 
 // GET /users for all users
 router.get('/', getAllUsers);

@@ -1,48 +1,119 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+
+const USER_ROLES = [
+  "visitor",
+  "buyer",
+  "renter",
+  "seller",
+  "agent",
+  "administrator",
+];
+
+const ROLE_ACTIONS = {
+  visitor: [
+    "browseProperties",
+    "searchProperties",
+    "viewPropertyDetails",
+    "sendInquiry",
+  ],
+
+  buyer: [
+    "browseProperties",
+    "searchProperties",
+    "viewPropertyDetails",
+    "sendInquiry",
+    "saveFavourites",
+    "requestViewing",
+  ],
+
+  renter: [
+    "browseProperties",
+    "searchProperties",
+    "viewPropertyDetails",
+    "sendInquiry",
+    "saveFavourites",
+    "requestViewing",
+  ],
+
+  seller: [
+    "browseProperties",
+    "searchProperties",
+    "viewPropertyDetails",
+    "manageListings",
+  ],
+
+  agent: [
+    "browseProperties",
+    "searchProperties",
+    "viewPropertyDetails",
+    "manageListings",
+  ],
+
+  administrator: [
+    "browseProperties",
+    "searchProperties",
+    "viewPropertyDetails",
+    "reviewVerification",
+    "moderateListings",
+  ],
+};
 
 const userSchema = new mongoose.Schema({
+  userId: {
+    type: Number,
+    required: true,
+    unique: true,
+    min: [1, "userId must be a positive integer"],
+    validate: {
+      validator: Number.isInteger,
+      message: "userId must be a positive integer",
+    },
+  },
+
   email: {
     type: String,
     required: true,
     unique: true,
     trim: true,
     lowercase: true,
-    match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email address']
+    match: [/^\S+@\S+\.\S+$/, "Please enter a valid email address"],
   },
   firstName: {
     type: String,
-    trim: true
+    trim: true,
   },
   lastName: {
     type: String,
-    trim: true
+    trim: true,
   },
   phone: {
     type: String,
-    trim: true
+    trim: true,
   },
   bio: {
     type: String,
-    maxlength: 500
+    maxlength: 500,
   },
-  // Verification status (set when a Verification request is approved)
-  verifiedRole: {
+  role: {
     type: String,
-    enum: ['seller', 'agent', null],
-    default: null
+    enum: USER_ROLES,
+    required: true,
+    default: "buyer",
   },
+
   verifiedAt: {
-    type: Date
+    type: Date,
   },
-  // Grants access to the admin review panel
-  isAdmin: {
-    type: Boolean,
-    default: false
-  },
+
   createdAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
-module.exports = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
+
+User.ROLES = USER_ROLES;
+User.ROLE_ACTIONS = ROLE_ACTIONS;
+
+module.exports = User;
