@@ -1,18 +1,19 @@
 const express = require('express');
 const router = express.Router();
+const { isAuthenticated } = require('../middleware/auth');
 const {
   getAllFavourites,
   addFavourite,
   deleteFavourite,
 } = require('../controllers/favouriteControllers');
 
-// GET /favourites
-router.get('/', getAllFavourites);
+// Add to favorites
+router.post('/:propertyId', isAuthenticated, addFavourite);
 
-// POST /favourites/:propertyId
-router.post('/:propertyId', addFavourite);
+// Remove from favorites
+router.delete('/:propertyId', isAuthenticated, deleteFavourite);
 
-// DELETE /favourites/:propertyId
-router.delete('/:propertyId', deleteFavourite);
+// View all favorites
+router.get('/', isAuthenticated, getAllFavourites);
 
 module.exports = router;

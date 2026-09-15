@@ -1,17 +1,25 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const favouriteSchema = new mongoose.Schema(
-  {
-    propertyId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Property",
-      required: true,
-      unique: true,
-    },
+const favoriteSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+    index: true
   },
-  { timestamps: true },
-);
+  property: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Property',
+    required: true,
+    index: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
 
-const Favourite = mongoose.model("Favourite", favouriteSchema);
+// Prevent duplicate favorites
+favoriteSchema.index({ user: 1, property: 1 }, { unique: true });
 
-module.exports = Favourite;
+module.exports = mongoose.model('Favorite', favoriteSchema);

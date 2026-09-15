@@ -14,7 +14,7 @@ const {
 // GET /properties for active properties
 router.get('/', getActiveProperties);
 
-// GET /properties for all properties
+// GET /properties/all for all properties
 router.get('/all', getAllProperties);
 
 // POST /properties

@@ -22,7 +22,7 @@ Develop a responsive React representation of KotiSpot's main property-seeker, ac
 
 | Priority | Product Backlog ID | Sprint 2 User Story | Product Backlog Item | Story Points | Main Work |
 | ---: | --- | --- | --- | ---: | --- |
-| 1 | PBI-01 | S2-US-01 | Browse active properties for sale or rent | 3 | Frontend and backend |
+| 1 | PBI-01 | S2-US-01 | Browse active properties for sale or rent | 3 | Frontend and backend | 
 | 2 | PBI-02 | S2-US-02 | View complete property details | 5 | Frontend and backend |
 | 3 | PBI-03 | S2-US-03 | Search properties by location or keyword | 5 | Frontend and backend |
 | 4 | PBI-04 | S2-US-04 | Filter and sort properties | 5 | Frontend and backend |

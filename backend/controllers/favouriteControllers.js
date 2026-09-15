@@ -1,69 +1,51 @@
 const mongoose = require("mongoose");
-const Favourite = require("../models/favouriteModel");
-const Property = require("../models/propertyModel");
+const Favorite = require("../models/favouriteModel");
 
 // GET /favourites
-const getAllFavourites = async (req, res) => {
+const getAllFavourites =  async (req, res) => {
   try {
-    const favourites = await Favourite.find().populate("propertyId");
-    res.status(200).json(favourites.map((favourite) => favourite.propertyId));
+    const favorites = await Favorite.find({ user: req.session.userId })
+      .populate({
+        path: 'property',
+        populate: { path: 'owner', select: 'username' }
+      })
+      .sort({ createdAt: -1 });
+
+    res.json({ favorites });
   } catch (error) {
-    res.status(500).json({ message: "Failed to retrieve favourites" });
+    console.error(error);
+    res.status(500).json({ error: 'Error loading favorites' });
   }
-};
+}
 
 // POST /favourites/:propertyId
 const addFavourite = async (req, res) => {
-  const { propertyId } = req.params;
-
-  if (!mongoose.Types.ObjectId.isValid(propertyId)) {
-    return res.status(400).json({ message: "Invalid property ID" });
-  }
-
   try {
-    const property = await Property.findById(propertyId);
-
-    if (!property) {
-      return res.status(404).json({ message: "Property not found" });
-    }
-
-    const existingFavourite = await Favourite.findOne({ propertyId });
-
-    if (existingFavourite) {
-      return res.status(409).json({ message: "Property already favourited" });
-    }
-
-    const favourite = await Favourite.create({ propertyId });
-    res.status(201).json(favourite);
+    await Favorite.findOneAndUpdate(
+      { user: req.session.userId, property: req.params.propertyId },
+      { user: req.session.userId, property: req.params.propertyId },
+      { upsert: true }
+    );
+    res.json({ success: true, favorited: true });
   } catch (error) {
-    if (error.code === 11000) {
-      return res.status(409).json({ message: "Property already favourited" });
-    }
-
-    res.status(500).json({ message: "Failed to add favourite" });
+    console.error(error);
+    res.status(500).json({ error: 'Could not add favorite' });
   }
-};
+}
 
 // DELETE /favourites/:propertyId
 const deleteFavourite = async (req, res) => {
-  const { propertyId } = req.params;
-
-  if (!mongoose.Types.ObjectId.isValid(propertyId)) {
-    return res.status(400).json({ message: "Invalid property ID" });
-  }
-
   try {
-    const deletedFavourite = await Favourite.findOneAndDelete({ propertyId });
-
-    if (!deletedFavourite) {
-      return res.status(404).json({ message: "Favourite not found" });
-    }
-
-    res.status(200).json({ message: "Favourite deleted successfully" });
+    await Favorite.findOneAndDelete({
+      user: req.session.userId,
+      property: req.params.propertyId
+    });
+    res.json({ success: true, favorited: false });
   } catch (error) {
-    res.status(500).json({ message: "Failed to delete favourite" });
+    console.error(error);
+    res.status(500).json({ error: 'Could not remove favorite' });
   }
-};
+}
 
 module.exports = {
   getAllFavourites,
