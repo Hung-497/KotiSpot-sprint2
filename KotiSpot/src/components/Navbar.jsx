@@ -1,6 +1,6 @@
 import { navLinks, authLinks } from "../../data";
 import logo from "../assets/KotiSpot_logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { User, Heart, House, Settings, Bell, BriefcaseBusiness, ShieldCheck, LogOut } from "lucide-react";
 
@@ -8,12 +8,14 @@ import { User, Heart, House, Settings, Bell, BriefcaseBusiness, ShieldCheck, Log
 const Navbar = ({ isLoggedIn, onLogout }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+    const navigate = useNavigate();
     
 
     const handleLogout = () => {
         setIsMenuOpen(false);
         setShowLogoutConfirm(false);
         onLogout();
+        navigate("/");
     };
 
     return (

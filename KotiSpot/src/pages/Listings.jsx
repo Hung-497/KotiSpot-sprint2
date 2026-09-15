@@ -683,22 +683,7 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
 
 
                 {/* BUTTONS */}
-                <div className="mt-6 flex justify-end gap-4">
-
-                    <button
-                        type="button"
-                        className="
-                            rounded-lg
-                            border border-gray-300
-                            bg-white
-                            px-8 py-3
-                            text-sm
-                            text-[#08243f]
-                        "
-                    >
-                        Save draft
-                    </button>
-
+                <div className="mt-6 flex justify-end">
                     <button
                         type="button"
                         onClick={addListing}

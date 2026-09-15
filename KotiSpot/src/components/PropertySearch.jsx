@@ -46,8 +46,11 @@ const PropertySearch = ({ properties, onResults, placeholder, compact = false })
 
     return (
         <div className={`relative ${compact ? "" : "rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"}`}>
-            <div className={`flex ${compact ? "rounded-full bg-white p-2 shadow-md" : "overflow-hidden rounded-xl border border-gray-300"}`}>
-                <Search size={compact ? 18 : 20} className={compact ? "ml-3 text-gray-400" : "absolute left-5 top-1/2 -translate-y-1/2 text-gray-400"} />
+                <div className={`relative flex ${compact ? "rounded-full bg-white p-2 shadow-md" : "overflow-hidden rounded-xl border border-gray-300"}`}>
+                    <Search
+                        size={compact ? 18 : 20}
+                        className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                    />
                 <input
                     type="text"
                     value={search}
@@ -55,8 +58,8 @@ const PropertySearch = ({ properties, onResults, placeholder, compact = false })
                     onKeyDown={(event) => event.key === "Enter" && applyFilters()}
                     placeholder={placeholder}
                     className={compact
-                        ? "flex-1 px-4 py-2 text-sm text-[#08243f] outline-none"
-                        : "w-full py-4 pl-14 pr-4 text-sm text-[#08243f] outline-none"}
+                        ? "flex-1 px-4 py-2 pl-10 text-sm text-[#08243f] outline-none"
+                        : "w-full py-4 pl-12 pr-4 text-sm text-[#08243f] outline-none"}
                 />
                 <button type="button" onClick={applyFilters} className={compact
                     ? "rounded-full bg-[#17634f] px-5 py-2 text-sm font-medium text-white hover:bg-[#12503f]"

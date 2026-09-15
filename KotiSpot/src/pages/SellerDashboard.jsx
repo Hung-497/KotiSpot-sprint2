@@ -42,7 +42,7 @@ const SellerDashboard = ({
     return (
         <div className="min-h-screen bg-[#f5f7f6] px-4 py-8 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-7xl">  
-                <section className="mb-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <section className="mb-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                     {[
                         {
                             label: "Total listings",
@@ -58,11 +58,6 @@ const SellerDashboard = ({
                             label: "For rent",
                             value: forRentCount,
                             accent: "bg-[#fff7e8] text-[#a46800]"
-                        },
-                        {
-                            label: "Status",
-                            value: propertyListings.length > 0 ? "Active" : "Draft",
-                            accent: "bg-[#f1f5f9] text-[#08243f]"
                         }
                     ].map((stat) => (
                         <div

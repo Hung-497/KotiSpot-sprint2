@@ -7,6 +7,10 @@ import { useState } from "react";
 const Rent = ( {favorites, setFavorites} ) => {
     const forRentProperties = properties.filter((property) => property.listingType === "rent")
     const [visibleProperties, setVisibleProperties] = useState(forRentProperties);
+    const [activeTab, setActiveTab] = useState("recommendations");
+    const displayedProperties = activeTab === "favorites"
+      ? visibleProperties.filter((property) => favorites.includes(property.id))
+      : visibleProperties;
 
     return (
     <div className="Heading min-h-screen bg-[#f8faf9]">
@@ -20,9 +24,9 @@ const Rent = ( {favorites, setFavorites} ) => {
           Search rental properties across Finland.
         </p>
 
-        <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
 
-          <p className="mb-4 font-medium text-[#08243f]">
+          <p className="mb-3 text-sm font-medium text-[#08243f]">
             Search for a house to rent
           </p>
 
@@ -42,45 +46,45 @@ const Rent = ( {favorites, setFavorites} ) => {
           <div className="mt-4 flex gap-5">
 
             <button
-              className="
-                flex items-center gap-2
-                rounded-full
-                bg-[#17634f]
-                px-5 py-2.5
-                text-sm font-medium
-                text-white
-              "
+              type="button"
+              onClick={() => setActiveTab("recommendations")}
+              className={
+                activeTab === "recommendations"
+                  ? "flex items-center gap-2 rounded-full bg-[#17634f] px-5 py-2 text-xs font-medium text-white"
+                  : "flex items-center gap-2 rounded-full bg-[#eef6f2] px-5 py-2 text-xs font-medium text-[#08243f]"
+              }
             >
-              <Star
-                size={16}
-                fill="currentColor"
-              />
-
-              Recommendations
+              <Star size={16} fill={activeTab === "recommendations" ? "currentColor" : "none"} />
+              Recommended
             </button>
 
 
-            <button className="flex items-center gap-2
-                rounded-full
-                bg-[#eef6f2]
-                px-5 py-2.5
-                text-sm font-medium
-                text-[#08243f]
-                transition
-                hover:bg-[#dfeee7]">
-              <Heart size={16} />
-              Favorites
+            <button
+              type="button"
+              onClick={() => setActiveTab("favorites")}
+              className={
+                activeTab === "favorites"
+                  ? "flex items-center gap-2 rounded-full bg-[#17634f] px-5 py-2 text-xs font-medium text-white"
+                  : "flex items-center gap-2 rounded-full bg-[#eef6f2] px-5 py-2 text-xs font-medium text-[#08243f]"
+              }
+            >
+              <Heart size={16} fill={activeTab === "favorites" ? "currentColor" : "none"} />
+              Favourites
             </button>
 
           </div>
         </div>
 
         <div className="Properties mt-6">
-          <Properties
-            properties={visibleProperties}
-            favorites={favorites}
-            setFavorites={setFavorites}
-          />
+          {activeTab === "favorites" && displayedProperties.length === 0 ? (
+            <p>No favourite properties yet.</p>
+          ) : (
+            <Properties
+              properties={displayedProperties}
+              favorites={favorites}
+              setFavorites={setFavorites}
+            />
+          )}
         </div>
 
       </div>
