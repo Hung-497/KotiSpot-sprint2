@@ -6,13 +6,13 @@ const {
   deleteFavourite,
 } = require('../controllers/favouriteControllers');
 
-// GET /favourites
-router.get('/', getAllFavourites);
+// GET /favourites/:userId
+router.get('/:userId', getAllFavourites);
 
-// POST /favourites/:propertyId
-router.post('/:propertyId', addFavourite);
+// POST /favourites/:userId/:propertyId
+router.post('/:userId/:propertyId', addFavourite);
 
-// DELETE /favourites/:propertyId
-router.delete('/:propertyId', deleteFavourite);
+// DELETE /favourites/:userId/:propertyId
+router.delete('/:userId/:propertyId', deleteFavourite);
 
 module.exports = router;
