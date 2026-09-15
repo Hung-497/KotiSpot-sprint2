@@ -27,10 +27,6 @@ const Profile = () => {
 
       <div className="mx-auto max-w-3xl">
 
-        <Link to="/" className="mb-4 inline-block text-sm text-gray-500 hover:text-[#17634f]">
-          ← Back
-        </Link>
-
         <div className="rounded-2xl border border-gray-300 bg-white p-6">
 
           <div className="flex items-center gap-5 border-b border-gray-300 pb-5">

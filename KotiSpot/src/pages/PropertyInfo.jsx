@@ -32,10 +32,6 @@ const PropertyInfo = ({ property, favorites, setFavorites }) => {
     <div className="min-h-screen bg-[#f8faf9] px-6 py-10">
       <div className="mx-auto max-w-6xl">
 
-        <Link to="/" className="mb-6 inline-block text-sm text-[#08243f] hover:text-[#17634f]">
-          ← Back
-        </Link>
-
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
 
           <div className="lg:col-span-2">

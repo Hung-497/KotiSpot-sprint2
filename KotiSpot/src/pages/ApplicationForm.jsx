@@ -66,19 +66,10 @@ const ApplicationForm = () => {
 
         <form onSubmit={handleSubmit} className="rounded-2xl border border-gray-300 bg-white p-6">
 
-          <div className="relative mb-6">
-
-            <Link
-              to="/sell"
-              className="absolute left-0 top-1 text-sm text-gray-600 hover:text-[#17634f]"
-            >
-              ← Back
-            </Link>
-
+          <div className="mb-6">
             <h1 className="text-center text-2xl font-bold text-[#08243f]">
               Application form
             </h1>
-
           </div>
 
           <h2 className="mb-4 text-base font-semibold text-[#08243f]">

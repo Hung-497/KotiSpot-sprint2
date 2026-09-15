@@ -149,15 +149,6 @@ const Listings = ({ propertyListings, setPropertyListings }) => {
         <div className="min-h-screen bg-[#f8faf9] px-6 py-10">
             <div className="mx-auto max-w-6xl">
 
-                {/* Back */}
-                <Link
-                    to="/sell"
-                    className="text-sm text-gray-500 hover:text-[#17634f]"
-                >
-                    ← Back
-                </Link>
-
-                {/* Heading */}
                 <h1 className="mt-4 text-3xl font-bold text-[#08243f]">
                     Create property listing
                 </h1>

@@ -40,10 +40,6 @@ const ApplicationThankMessage = () => {
             application has been approved.
           </p>
 
-          <Link to="/" className="mt-6 inline-block rounded-lg border border-[#17634f] px-5 py-2 text-sm font-medium text-[#17634f] transition hover:bg-[#eef6f2]">
-            Back to Main page
-          </Link>
-
         </div>
 
       </div>

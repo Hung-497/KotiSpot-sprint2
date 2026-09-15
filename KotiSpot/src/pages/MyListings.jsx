@@ -61,32 +61,25 @@ const MyListings = ({
 
                                 <div
                                     key={listing.id}
-                                    className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:shadow-md"
+                                    className="overflow-hidden rounded-[22px] border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg"
                                 >
 
-                                    <Listing
-                                        listing={listing}
-                                        onClick={setSelectedListing}
-                                    />
+                                    <Listing listing={listing} />
 
-
-                                    <div className="flex gap-3 border-t border-gray-200 p-4">
+                                    <div className="flex gap-3 border-t border-slate-200 p-4">
 
                                         <button
                                             type="button"
                                             onClick={() => handleEdit(listing)}
-                                            className="flex-1 rounded-lg border border-[#17634f] px-4 py-2.5 text-sm font-medium text-[#17634f] transition hover:bg-[#eef6f2]"
+                                            className="flex-1 rounded-xl border border-[#17634f] bg-[#eef6f2] px-4 py-2.5 text-sm font-semibold text-[#17634f] transition hover:bg-[#dfeeea]"
                                         >
                                             Edit
                                         </button>
 
-
                                         <button
                                             type="button"
-                                            onClick={() =>
-                                                deleteListing(listing.id)
-                                            }
-                                            className="flex-1 rounded-lg border border-red-300 px-4 py-2.5 text-sm font-medium text-red-500 transition hover:bg-red-50"
+                                            onClick={() => deleteListing(listing.id)}
+                                            className="flex-1 rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-100"
                                         >
                                             Delete
                                         </button>
@@ -117,16 +110,6 @@ const MyListings = ({
                         )}
 
 
-                        {selectedListing && (
-
-                            <ListingDetails
-                                listing={selectedListing}
-                                onClose={() =>
-                                    setSelectedListing(null)
-                                }
-                            />
-
-                        )}
 
                     </div>
 
