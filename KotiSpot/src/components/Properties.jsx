@@ -9,5 +9,4 @@ const Properties = ({ properties, favorites, setFavorites }) => {
         </ul>
     )
 }
-
 export default Properties
