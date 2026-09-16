@@ -104,5 +104,5 @@ Albaraae was also responsible for documenting the team's:
 
 ## Evidence
 
-![alt text](<Screenshot 2026-09-14 173541.png>)
-![alt text](<Screenshot 2026-09-14 173400.png>)
+![Backend contribution commit history](./img/backend-contributions.png)
+![Frontend contribution commit history](./img/frontend-contributions.png)
