@@ -16,6 +16,11 @@ const hasModerationInput = (body) =>
   Object.keys(body).some(
     (key) => key === "moderation" || key.startsWith("moderation."),
   );
+const hasValidRequestBody = (body) =>
+  body &&
+  typeof body === "object" &&
+  !Array.isArray(body) &&
+  Object.keys(body).length > 0;
 
 // GET /properties
 const getActiveProperties = async (req, res) => {
@@ -38,6 +43,12 @@ const getAllProperties = async (req, res) => {
 
 // POST /properties
 const createProperty = async (req, res) => {
+  if (!hasValidRequestBody(req.body)) {
+    return res.status(400).json({
+      message: "Property data is required",
+    });
+  }
+
   if (hasModerationInput(req.body)) {
     return res.status(400).json({
       message: "Moderation can only be changed through moderation routes",
@@ -49,13 +60,9 @@ const createProperty = async (req, res) => {
     res.status(201).json(newProperty);
   } catch (error) {
     if (error.name === "ValidationError" || error.name === "CastError") {
-      res
-        .status(400)
-        .json({ message: "Invalid property data", error: error.message });
+      res.status(400).json({ message: "Invalid property data" });
     } else {
-      res
-        .status(500)
-        .json({ message: "Failed to create property", error: error.message });
+      res.status(500).json({ message: "Failed to create property" });
     }
   }
 };
@@ -90,6 +97,11 @@ const updateProperty = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(propertyId)) {
     return res.status(400).json({ message: "Invalid property ID" });
   }
+  if (!hasValidRequestBody(req.body)) {
+    return res.status(400).json({
+      message: "Property data is required",
+    });
+  }
 
   if (hasModerationInput(req.body)) {
     return res.status(400).json({
@@ -111,13 +123,9 @@ const updateProperty = async (req, res) => {
     }
   } catch (error) {
     if (error.name === "ValidationError" || error.name === "CastError") {
-      res
-        .status(400)
-        .json({ message: "Invalid property data", error: error.message });
+      res.status(400).json({ message: "Invalid property data" });
     } else {
-      res
-        .status(500)
-        .json({ message: "Failed to update property", error: error.message });
+      res.status(500).json({ message: "Failed to update property" });
     }
   }
 };
@@ -139,9 +147,7 @@ const deleteProperty = async (req, res) => {
       res.status(404).json({ message: "Property not found" });
     }
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Failed to delete property", error: error.message });
+    res.status(500).json({ message: "Failed to delete property" });
   }
 };
 
@@ -201,11 +207,17 @@ const filterProperties = async (req, res) => {
       });
     }
 
-    if (req.query.listingType !== undefined && req.query.listingType !== "any") {
+    if (
+      req.query.listingType !== undefined &&
+      req.query.listingType !== "any"
+    ) {
       query.listingType = req.query.listingType;
     }
 
-    if (req.query.propertyType !== undefined && req.query.propertyType !== "any") {
+    if (
+      req.query.propertyType !== undefined &&
+      req.query.propertyType !== "any"
+    ) {
       query.propertyType = req.query.propertyType;
     }
 
@@ -258,7 +270,10 @@ const filterProperties = async (req, res) => {
 
     for (const field of ["city", "currency"]) {
       if (req.query[field] !== undefined) {
-        if (typeof req.query[field] !== "string" || req.query[field].trim() === "") {
+        if (
+          typeof req.query[field] !== "string" ||
+          req.query[field].trim() === ""
+        ) {
           return res.status(400).json({ message: `Invalid ${field} value` });
         }
 
@@ -282,9 +297,7 @@ const filterProperties = async (req, res) => {
 
     res.status(200).json(properties);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Failed to filter properties", error: error.message });
+    res.status(500).json({ message: "Failed to filter properties" });
   }
 };
 
@@ -301,7 +314,8 @@ const getPropertyByKeyword = async (req, res) => {
   const validListingTypes = ["sale", "rent", "any"];
   if (
     listingType !== undefined &&
-    (typeof listingType !== "string" || !validListingTypes.includes(listingType))
+    (typeof listingType !== "string" ||
+      !validListingTypes.includes(listingType))
   ) {
     return res.status(400).json({ message: "Invalid listing type" });
   }
@@ -327,7 +341,6 @@ const getPropertyByKeyword = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Failed to search properties",
-      error: error.message,
     });
   }
 };

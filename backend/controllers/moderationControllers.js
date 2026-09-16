@@ -62,9 +62,10 @@ const updateModerationStatus = async (req, res) => {
   }
 
   const body = req.body;
-  const bodyKeys = body && typeof body === "object" && !Array.isArray(body)
-    ? Object.keys(body)
-    : [];
+  const bodyKeys =
+    body && typeof body === "object" && !Array.isArray(body)
+      ? Object.keys(body)
+      : [];
 
   if (
     !body ||
@@ -116,7 +117,6 @@ const updateModerationStatus = async (req, res) => {
     if (error.name === "ValidationError" || error.name === "CastError") {
       return res.status(400).json({
         message: "Invalid moderation data",
-        error: error.message,
       });
     }
 
