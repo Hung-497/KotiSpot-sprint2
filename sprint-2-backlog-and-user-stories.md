@@ -38,10 +38,8 @@ Develop a responsive React representation of KotiSpot's main property-seeker, ac
 | 14 | PBI-11 | S2-US-14 | Provide a responsive and accessible interface | 5 | Frontend, across all pages |
 | 15 | PBI-12 | S2-US-15 | Validate data and handle errors safely | 8 | Frontend and backend |
 | 16 | PBI-13 | S2-US-16 | Save favorite properties | 3 | Frontend interaction and backend CRUD |
-| 17 | PBI-14 | S2-US-17 | Request a property viewing | 5 | Frontend and backend |
-| 18 | PBI-15 | S2-US-18 | Display properties on a map | 8 | Frontend and location data contract |
-| 19 | PBI-16 | S2-US-19 | Moderate property listings | 8 | Frontend and backend, without authentication |
-|  |  |  | **Total** | **109** |  |
+| 17 | PBI-16 | S2-US-19 | Moderate property listings | 8 | Frontend and backend, without authentication |
+|  |  |  | **Total** | **96** |  |
 
 ## User Stories
 
@@ -392,49 +390,7 @@ As a buyer or renter, I want to save favorite properties so that I can return to
 
 ---
 
-### S2-US-17: Request a property viewing
 
-- **Related Product Backlog item:** PBI-14
-- **Story points:** 5
-- **Dependencies:** S2-US-02 and S2-US-07
-
-**User story**
-
-As a buyer or renter, I want to request a property viewing so that I can inspect it before deciding whether to buy or rent it.
-
-**Acceptance criteria**
-
-1. The frontend form allows selection of a future date and time and an optional message.
-2. Past dates and times are rejected with a clear error.
-3. Submission displays a simulated confirmation and is associated with the correct mock property.
-4. The seller or agent mock view can demonstrate pending, accepted, and declined states.
-5. The backend supports creating, viewing, accepting, and declining viewing requests.
-6. The request and response objects contain agreed property, requester, date, message, and status fields.
-7. The frontend and backend workflows operate independently.
-
----
-
-### S2-US-18: Display properties on a map
-
-- **Related Product Backlog item:** PBI-15
-- **Story points:** 8
-- **Dependencies:** S2-US-01 and S2-US-02
-
-**User story**
-
-As a buyer or renter, I want to see properties on a map so that I can understand their locations.
-
-**Acceptance criteria**
-
-1. Properties with valid mock coordinates appear as map markers or in the group's agreed map representation.
-2. Selecting a marker identifies the matching property and provides a path to its details page.
-3. Sale price and monthly rent are clearly distinguished.
-4. Missing or invalid coordinates do not break the page.
-5. The map or fallback representation works at mobile and desktop widths.
-6. Latitude and longitude fields and privacy expectations are defined in the property data contract.
-7. The feature does not expose unnecessarily precise private location information.
-
----
 
 ### S2-US-19: Moderate property listings
 
@@ -461,10 +417,10 @@ As an administrator, I want to review and moderate property listings so that ina
 | Task ID | Task | Supports |
 | --- | --- | --- |
 | S2-T01 | Confirm the Sprint Goal, selected backlog, estimates, and team ownership | All stories |
-| S2-T02 | Agree on the property, user, inquiry, verification, favorite, viewing, and moderation data structures | All relevant stories |
+| S2-T02 | Agree on the property, user, inquiry, verification, favorite, and moderation data structures | All relevant stories |
 | S2-T03 | Record required endpoints, HTTP methods, request JSON, response JSON, and error shapes | All backend stories |
 | S2-T04 | Set up the React application, shared layout, navbar, and routes | All frontend stories |
-| S2-T05 | Create reusable property cards, forms, feedback messages, and mock datasets | S2-US-01–S2-US-18 |
+| S2-T05 | Create reusable property cards, forms, feedback messages, and mock datasets | All relevant frontend stories |
 | S2-T06 | Set up the Express server using models, controllers, routes, and middleware | All backend stories |
 | S2-T07 | Implement the selected backend CRUD operations first with mock or array data | All backend stories |
 | S2-T08 | Refactor persistence to MongoDB and Mongoose after the class instruction | All backend stories |
