@@ -18,7 +18,14 @@ const verificationRequestSchema = new mongoose.Schema({
   fullName: { type: String, required: true, trim: true, maxlength: 100 },
   companyName: { type: String, trim: true, maxlength: 100 },
   phone: { type: String, required: true, trim: true, maxlength: 40 },
-  email: { type: String, required: true, trim: true, maxlength: 100 },
+  email: {
+    type: String,
+    required: true,
+    trim: true,
+    lowercase: true,
+    maxlength: 100,
+    match: [/^\S+@\S+\.\S+$/, "Please enter a valid email address"],
+  },
   // Agent-only fields
   areas: { type: String, trim: true, maxlength: 300 },
   yearsExperience: { type: Number, min: 0, max: 80 },

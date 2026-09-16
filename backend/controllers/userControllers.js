@@ -26,6 +26,17 @@ const getAllUsers = async (req, res) => {
 };
 
 const createUser = async (req, res) => {
+  if (
+    !req.body ||
+    typeof req.body !== "object" ||
+    Array.isArray(req.body) ||
+    Object.keys(req.body).length === 0
+  ) {
+    return res.status(400).json({
+      message: "User data is required",
+    });
+  }
+
   try {
     const user = await User.create(req.body);
 
@@ -79,7 +90,24 @@ const updateUser = async (req, res) => {
     return res.status(400).json({ message: "Invalid user ID" });
   }
 
+  if (
+    !req.body ||
+    typeof req.body !== "object" ||
+    Array.isArray(req.body) ||
+    Object.keys(req.body).length === 0
+  ) {
+    return res.status(400).json({
+      message: "User data is required",
+    });
+  }
+
   const { userId: ignoredUserId, ...updates } = req.body;
+
+  if (Object.keys(updates).length === 0) {
+    return res.status(400).json({
+      message: "At least one editable user field is required",
+    });
+  }
 
   try {
     const updatedUser = await User.findOneAndUpdate({ userId }, updates, {
@@ -96,6 +124,12 @@ const updateUser = async (req, res) => {
       permittedActions: User.ROLE_ACTIONS[updatedUser.role],
     });
   } catch (error) {
+    if (error.code === 11000) {
+      return res.status(409).json({
+        message: "User ID or email already exists",
+      });
+    }
+
     if (error.name === "ValidationError") {
       return res.status(400).json({
         message: "Invalid user data",

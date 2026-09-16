@@ -23,7 +23,6 @@ const ROLE_ACTIONS = {
     "viewPropertyDetails",
     "sendInquiry",
     "saveFavourites",
-    "requestViewing",
   ],
 
   renter: [
@@ -32,7 +31,6 @@ const ROLE_ACTIONS = {
     "viewPropertyDetails",
     "sendInquiry",
     "saveFavourites",
-    "requestViewing",
   ],
 
   seller: [

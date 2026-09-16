@@ -58,13 +58,16 @@ const createVerification = async (req, res) => {
       });
     }
 
-    if (!idDocument?.trim()) {
+    if (typeof idDocument !== "string" || idDocument.trim() === "") {
       return res.status(400).json({
         message: "ID document is required",
       });
     }
 
-    if (role === "agent" && !licenseDocument?.trim()) {
+    if (
+      role === "agent" &&
+      (typeof licenseDocument !== "string" || licenseDocument.trim() === "")
+    ) {
       return res.status(400).json({
         message: "License/certification document is required for agents",
       });
@@ -126,7 +129,11 @@ const getUserVerification = async (req, res) => {
 const getApplications = async (req, res) => {
   const { status } = req.query;
 
-  if (status && !["pending", "approved", "rejected"].includes(status)) {
+  if (
+    status !== undefined &&
+    (typeof status !== "string" ||
+      !["pending", "approved", "rejected"].includes(status))
+  ) {
     return res.status(400).json({
       message: "Invalid verification status",
     });
@@ -166,7 +173,10 @@ const reviewApplication = async (req, res) => {
     });
   }
 
-  if (status === "rejected" && (!rejectionReason || !rejectionReason.trim())) {
+  if (
+    status === "rejected" &&
+    (typeof rejectionReason !== "string" || rejectionReason.trim() === "")
+  ) {
     return res.status(400).json({
       message: "Rejection reason is required",
     });
