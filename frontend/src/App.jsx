@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Results from "./pages/Results";
 import Footer from "../src/components/Footer"
@@ -59,7 +59,7 @@ function App() {
 
     return (
         <>
-            <BrowserRouter>
+            <HashRouter>
                 <Navbar isLoggedIn={isLoggedIn} onLogout={logOut} />
                 <Routes>
                     <Route path="/" element={<Home favorites={favorites} setFavorites={setFavorites} />}
@@ -112,7 +112,7 @@ function App() {
                     />
                 </Routes>
                 <Footer />
-            </BrowserRouter>
+            </HashRouter>
         </>
     );
 }
