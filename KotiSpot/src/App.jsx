@@ -88,15 +88,7 @@ function App() {
                     />
                     <Route path="/profile" element={<Profile />}
                     />
-                    <Route
-                        path="/adminpanel"
-                        element={
-                            <AdminPanel
-                                properties={properties}
-                                moderationStatuses={moderationStatuses}
-                                onModerate={moderateProperty}
-                            />
-                        }
+                    <Route path="/adminpanel" element={ <AdminPanel properties={properties} moderationStatuses={moderationStatuses}onModerate={moderateProperty}/>}
                     />
                     <Route path="/contact" element={<Contact />}
                     />
